@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react"
+import { exportEspIdf } from "../codegen/exportIdf"
 import { loadChip } from "../data/loadChip"
 import { evaluate } from "../engine/evaluate"
 import { defaultSettings } from "../engine/types"
 import type { Assignment, ProjectSettings } from "../engine/types"
 import { AssignmentPanel } from "./AssignmentPanel"
+import { ExportPanel } from "./ExportPanel"
 import { IssuesPanel } from "./IssuesPanel"
 import { ModuleMap } from "./ModuleMap"
 
@@ -17,6 +19,10 @@ export function Planner() {
   const issues = useMemo(
     () => evaluate(chip, assignments, settings),
     [assignments, settings],
+  )
+  const exported = useMemo(
+    () => exportEspIdf(chip, assignments, settings, issues),
+    [assignments, settings, issues],
   )
   const selectedPin = chip.pins.find((pin) => pin.gpio === selectedGpio) ?? null
   const selectedAssignment = assignments.find((assignment) => assignment.gpio === selectedGpio)
@@ -89,6 +95,7 @@ export function Planner() {
             onSelect={setSelectedGpio}
           />
           <IssuesPanel issues={issues} onSelect={setSelectedGpio} />
+          <ExportPanel source={exported} />
         </div>
         <AssignmentPanel
           chip={chip}

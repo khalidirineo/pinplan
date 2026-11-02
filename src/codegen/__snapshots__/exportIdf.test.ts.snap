@@ -1,0 +1,258 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ESP-IDF export > checks adc_oneshot_read for ESP_ERR_TIMEOUT on ADC2 and not on ADC1 1`] = `
+"/*
+ * PinPlan export for ESP32-S3-WROOM-1.
+ * ESP-IDF v5.3+.
+ * Settings: Wi-Fi on, PSRAM none, native USB off.
+ * Clock rates, ADC attenuation, and the LEDC timer are export defaults. Edit the PINPLAN_* macros. They are not facts from the pin database.
+ * This design still has conflicts. The code below was generated anyway.
+ * [warning] adc2-wifi GPIO11: GPIO11 is ADC2 channel 0. ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.
+ */
+
+#include "esp_err.h"
+#include "esp_adc/adc_oneshot.h"
+
+static adc_oneshot_unit_handle_t pinplan_adc1;
+static adc_oneshot_unit_handle_t pinplan_adc2;
+
+static void pinplan_init_adc(void)
+{
+    /*
+     * ADC_ATTEN_DB_12 is an export default, not a fact from the pin database.
+     */
+    adc_oneshot_unit_init_cfg_t pinplan_adc1_cfg = {
+        .unit_id = ADC_UNIT_1,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&pinplan_adc1_cfg, &pinplan_adc1));
+    adc_oneshot_chan_cfg_t pinplan_adc1_chan = {
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+        .atten = ADC_ATTEN_DB_12,
+    };
+    adc_oneshot_unit_init_cfg_t pinplan_adc2_cfg = {
+        .unit_id = ADC_UNIT_2,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&pinplan_adc2_cfg, &pinplan_adc2));
+    adc_oneshot_chan_cfg_t pinplan_adc2_chan = {
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+        .atten = ADC_ATTEN_DB_12,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(pinplan_adc1, ADC_CHANNEL_0, &pinplan_adc1_chan));
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(pinplan_adc2, ADC_CHANNEL_0, &pinplan_adc2_chan));
+}
+
+/*
+ * Label: battery.
+ */
+esp_err_t pinplan_adc_read_gpio1(int *raw)
+{
+    esp_err_t err = adc_oneshot_read(pinplan_adc1, ADC_CHANNEL_0, raw);
+    ESP_ERROR_CHECK(err);
+    return err;
+}
+
+/*
+ * Label: sensor.
+ * ADC2 is also used by Wi-Fi. adc_oneshot_read may return ESP_ERR_TIMEOUT, and the raw result is then invalid.
+ */
+esp_err_t pinplan_adc_read_gpio11(int *raw)
+{
+    esp_err_t err = adc_oneshot_read(pinplan_adc2, ADC_CHANNEL_0, raw);
+    if (err == ESP_ERR_TIMEOUT) {
+        return err;
+    }
+    ESP_ERROR_CHECK(err);
+    return err;
+}
+
+void pinplan_init(void)
+{
+    pinplan_init_adc();
+}
+"
+`;
+
+exports[`ESP-IDF export > emits an empty init when nothing is assigned 1`] = `
+"/*
+ * PinPlan export for ESP32-S3-WROOM-1.
+ * ESP-IDF v5.3+.
+ * Settings: Wi-Fi on, PSRAM none, native USB off.
+ * Clock rates, ADC attenuation, and the LEDC timer are export defaults. Edit the PINPLAN_* macros. They are not facts from the pin database.
+ * No errors or warnings at export.
+ * No pins are assigned.
+ */
+
+#include "esp_err.h"
+
+void pinplan_init(void)
+{
+}
+"
+`;
+
+exports[`ESP-IDF export > initializes the other peripherals and still exports when the design has an error 1`] = `
+"/*
+ * PinPlan export for ESP32-S3-WROOM-1.
+ * ESP-IDF v5.3+.
+ * Settings: Wi-Fi on, PSRAM none, native USB on.
+ * Clock rates, ADC attenuation, and the LEDC timer are export defaults. Edit the PINPLAN_* macros. They are not facts from the pin database.
+ * This design still has conflicts. The code below was generated anyway.
+ * [error] usb-pins GPIO19: GPIO19 is assigned while native USB is enabled. USB D- (USB_D- / USB_OTG_D-). With native USB enabled this pad belongs to the USB PHY.
+ */
+
+#include "esp_err.h"
+#include "driver/gpio.h"
+#include "driver/i2c_master.h"
+#include "driver/spi_master.h"
+#include "driver/uart.h"
+#include "driver/ledc.h"
+
+#define PINPLAN_I2C_HZ 400000
+#define PINPLAN_SPI_HZ 1000000
+#define PINPLAN_UART_BAUD 115200
+#define PINPLAN_UART_RX_BUF 256
+#define PINPLAN_LEDC_HZ 5000
+
+static void pinplan_init_gpio(void)
+{
+    /*
+     * Label: led.
+     */
+    gpio_config_t gpio4 = {
+        .pin_bit_mask = 1ULL << 4,
+        .mode = GPIO_MODE_OUTPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    ESP_ERROR_CHECK(gpio_config(&gpio4));
+    gpio_config_t gpio5 = {
+        .pin_bit_mask = 1ULL << 5,
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    ESP_ERROR_CHECK(gpio_config(&gpio5));
+    gpio_config_t gpio19 = {
+        .pin_bit_mask = 1ULL << 19,
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    ESP_ERROR_CHECK(gpio_config(&gpio19));
+}
+
+static void pinplan_init_i2c(void)
+{
+    /*
+     * Add devices on this bus with i2c_master_bus_add_device. Use PINPLAN_I2C_HZ as scl_speed_hz.
+     */
+    i2c_master_bus_config_t i2c0 = {
+        .i2c_port = I2C_NUM_0,
+        .sda_io_num = GPIO_NUM_8,
+        .scl_io_num = GPIO_NUM_9,
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .glitch_ignore_cnt = 7,
+        .flags.enable_internal_pullup = false,
+    };
+    i2c_master_bus_handle_t i2c0_bus = NULL;
+    ESP_ERROR_CHECK(i2c_new_master_bus(&i2c0, &i2c0_bus));
+    (void)i2c0_bus;
+}
+
+static void pinplan_init_spi(void)
+{
+    spi_bus_config_t spi2_host = {
+        .mosi_io_num = GPIO_NUM_10,
+        .miso_io_num = GPIO_NUM_11,
+        .sclk_io_num = GPIO_NUM_12,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 4096,
+    };
+    ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &spi2_host, SPI_DMA_CH_AUTO));
+    spi_device_interface_config_t spi2_host_cs0 = {
+        .clock_speed_hz = PINPLAN_SPI_HZ,
+        .mode = 0,
+        .spics_io_num = GPIO_NUM_13,
+        .queue_size = 1,
+    };
+    spi_device_handle_t spi2_host_cs0_handle = NULL;
+    ESP_ERROR_CHECK(spi_bus_add_device(SPI2_HOST, &spi2_host_cs0, &spi2_host_cs0_handle));
+    (void)spi2_host_cs0_handle;
+    spi_device_interface_config_t spi2_host_cs1 = {
+        .clock_speed_hz = PINPLAN_SPI_HZ,
+        .mode = 0,
+        .spics_io_num = GPIO_NUM_14,
+        .queue_size = 1,
+    };
+    spi_device_handle_t spi2_host_cs1_handle = NULL;
+    ESP_ERROR_CHECK(spi_bus_add_device(SPI2_HOST, &spi2_host_cs1, &spi2_host_cs1_handle));
+    (void)spi2_host_cs1_handle;
+    spi_bus_config_t spi3_host = {
+        .mosi_io_num = -1,
+        .miso_io_num = -1,
+        .sclk_io_num = GPIO_NUM_21,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = 4096,
+    };
+    ESP_ERROR_CHECK(spi_bus_initialize(SPI3_HOST, &spi3_host, SPI_DMA_CH_AUTO));
+    /*
+     * SPI3_HOST has no CS pin. Add a device with spi_bus_add_device when you choose one.
+     */
+}
+
+static void pinplan_init_uart(void)
+{
+    uart_config_t uart1 = {
+        .baud_rate = PINPLAN_UART_BAUD,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_1, PINPLAN_UART_RX_BUF, 0, 0, NULL, 0));
+    ESP_ERROR_CHECK(uart_param_config(UART_NUM_1, &uart1));
+    ESP_ERROR_CHECK(uart_set_pin(UART_NUM_1, GPIO_NUM_16, GPIO_NUM_17, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+}
+
+static void pinplan_init_ledc(void)
+{
+    /*
+     * The pin database does not record how many LEDC timers the chip has. Every channel below uses timer 0.
+     * PINPLAN_LEDC_HZ and the 13-bit duty resolution are export defaults.
+     */
+    ledc_timer_config_t timer = {
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .duty_resolution = LEDC_TIMER_13_BIT,
+        .timer_num = LEDC_TIMER_0,
+        .freq_hz = PINPLAN_LEDC_HZ,
+        .clk_cfg = LEDC_AUTO_CLK,
+    };
+    ESP_ERROR_CHECK(ledc_timer_config(&timer));
+    ledc_channel_config_t ledc_gpio18 = {
+        .gpio_num = GPIO_NUM_18,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .channel = LEDC_CHANNEL_0,
+        .intr_type = LEDC_INTR_DISABLE,
+        .timer_sel = LEDC_TIMER_0,
+        .duty = 0,
+        .hpoint = 0,
+    };
+    ESP_ERROR_CHECK(ledc_channel_config(&ledc_gpio18));
+}
+
+void pinplan_init(void)
+{
+    pinplan_init_gpio();
+    pinplan_init_i2c();
+    pinplan_init_spi();
+    pinplan_init_uart();
+    pinplan_init_ledc();
+}
+"
+`;
