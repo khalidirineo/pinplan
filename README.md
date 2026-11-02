@@ -1,6 +1,6 @@
 # PinPlan
 
-PinPlan is a GPIO pin planner for the ESP32-S3-WROOM-1. You assign functions to pins, and the rule engine flags conflicts and hardware traps before you build the board. The planner can export ESP-IDF v5.3+ C for the current design, including when that design still has errors. File save and shareable links are later phases.
+PinPlan is a GPIO pin planner for the ESP32-S3-WROOM-1. You assign functions to pins, and the rule engine flags conflicts and hardware traps before you build the board. The planner can export ESP-IDF v5.3+ C for the current design, including when that design still has errors. Save JSON keeps the assignments and settings in a file. Load JSON opens that file again. Copy link puts the same design in the page address, compressed with gzip, so it can be opened from a static host.
 
 The database is `src/data/chips/esp32s3.json`. Every constraint has a `source` and a `verified` flag. Leave `verified` false until that fact has been compared with the cited document. Paths that have been checked are listed in `src/data/chip.test.ts`. `scripts/draft-esp32s3.mjs` drafted that file from the local reference clone and will not overwrite it unless you pass `--force`. After you start reviewing facts, do not re-run it.
 
@@ -20,7 +20,8 @@ npm run dev
 - `src/engine/` is a pure function, `evaluate(chip, assignments, settings)`, which returns issues. No React.
 - `src/engine/rules/` has one file per rule. Add a rule here.
 - `src/codegen/` turns a design into ESP-IDF C. No React. `exportEspIdf(chip, assignments, settings, issues)` is the entry point.
-- `src/ui/` is the pad map, the assignment sidebar, the issue list, and the export panel.
+- `src/project/` saves and loads the design as JSON, and compresses it for the share link. No React.
+- `src/ui/` is the pad map, the assignment sidebar, the issue list, the export panel, and the save, load, and share controls.
 
 An issue is `{ severity, pins, ruleId, message, fix }` with severity `error`, `warning`, or `info`.
 
@@ -43,11 +44,17 @@ SPI instance numbers are `2` and `3` (SPI2 and SPI3). SPI0 and SPI1 are the flas
 
 ## Dependencies
 
-React, Vite, TypeScript, and Vitest are the app stack. Tailwind CSS is pinned to v3, with PostCSS and Autoprefixer, which is the usual v3 build path. No other runtime libraries. URL compression is not in this phase.
+React, Vite, TypeScript, and Vitest are the app stack. Tailwind CSS is pinned to v3, with PostCSS and Autoprefixer, which is the usual v3 build path. No other runtime libraries. The share link uses the browser `CompressionStream` gzip API.
 
 ## ESP-IDF export
 
 The export panel prints one C file. `pinplan_init` configures GPIO, ADC oneshot units, I2C master buses, SPI2/SPI3, UART, and LEDC from the assignments. Clock rates, ADC attenuation (`ADC_ATTEN_DB_12`), and the shared LEDC timer are macros at the top of the file, not facts from the pin database. An I2C bus or an SPI bus that is missing a required pin is left as a comment instead of a call that cannot succeed. ADC2 read helpers check `adc_oneshot_read` for `ESP_ERR_TIMEOUT` before `ESP_ERROR_CHECK`, because that return means Wi-Fi still owns the converter and the raw sample is invalid. Errors and warnings are copied into a comment at the top, and the file is still generated.
+
+## Save, load, and share
+
+Save JSON downloads `pinplan-esp32-s3-wroom-1.json`. The file is `{ chip, settings, assignments }`. Load JSON replaces the current design when the chip id matches and every assignment has the fields that function needs. A file for another chip, or an assignment with a missing direction, instance, or signal, is rejected and the open design stays as it is.
+
+Copy link writes a `#d=` hash. The hash is `v1.` plus the gzip-compressed JSON, encoded so it is safe in a URL. Opening that address restores the assignments and settings. An empty planner with the default settings has no hash. The address updates as you edit, so the bar always matches the design on screen.
 
 ## Credits and licenses
 

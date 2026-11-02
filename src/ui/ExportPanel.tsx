@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { copyText } from "./clipboard"
 
 interface ExportPanelProps {
   source: string
@@ -8,27 +9,7 @@ export function ExportPanel({ source }: ExportPanelProps) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle")
 
   async function copy() {
-    try {
-      await navigator.clipboard.writeText(source)
-      setStatus("copied")
-      return
-    } catch {
-      // The clipboard API is denied in some embedded browsers. Fall through.
-    }
-    try {
-      const area = document.createElement("textarea")
-      area.value = source
-      area.setAttribute("readonly", "")
-      area.style.position = "fixed"
-      area.style.left = "-9999px"
-      document.body.appendChild(area)
-      area.select()
-      const copied = document.execCommand("copy")
-      area.remove()
-      setStatus(copied ? "copied" : "failed")
-    } catch {
-      setStatus("failed")
-    }
+    setStatus(await copyText(source) ? "copied" : "failed")
   }
 
   return (
