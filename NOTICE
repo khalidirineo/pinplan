@@ -1,0 +1,30 @@
+PinPlan
+Copyright (c) 2026 PinPlan contributors
+
+PinPlan's own code is under the MIT license (see LICENSE).
+
+Hardware facts in src/data/chips/esp32s3.json were transcribed, not copied as
+files, from:
+
+1. Espressif esp-gpio-tool (Apache License 2.0)
+   https://github.com/espressif/esp-gpio-tool
+   Commit used while drafting: a1bcdb2fe2edc50c9c88e5506dc2a841d9888dd4
+   Copyright 2024-2026 Espressif Systems (Shanghai) CO LTD
+   See third_party/esp-gpio-tool/LICENSE.
+   The YAML files themselves are not redistributed in this repository.
+
+2. ESP32 Pinout Studio pad and symbol data (MIT)
+   Copyright (c) 2026 Felix Kunz
+   https://github.com/FelixKunzJr/ESPPinoutWebsite
+   The WROOM-1 castellation map was transcribed from
+   src/data/chips/generated.ts (S3_WROOM_1_LAYOUT and S3_WROOM_1_SYMBOL).
+   That file was generated from Espressif's KiCad libraries (Apache-2.0):
+   https://github.com/espressif/kicad-libraries
+   See third_party/esp32pin/LICENSE.
+   PinPlan does not include esp32pin application code.
+
+ESP32 is a trademark of Espressif Systems. PinPlan is not affiliated with
+or endorsed by Espressif Systems.
+
+Every hardware fact in the pin database is marked verified: false until a
+person checks it against the current datasheet or technical reference manual.

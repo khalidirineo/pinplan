@@ -1,0 +1,1572 @@
+{
+  "id": "esp32-s3-wroom-1",
+  "name": "ESP32-S3-WROOM-1",
+  "family": "ESP32-S3",
+  "datasheet": {
+    "title": "ESP32-S3 Series Datasheet",
+    "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
+    "revision": "v2.2"
+  },
+  "moduleDatasheet": {
+    "title": "ESP32-S3-WROOM-1 & WROOM-1U Datasheet",
+    "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf",
+    "revision": "v1.8"
+  },
+  "trm": {
+    "title": "ESP32-S3 Technical Reference Manual",
+    "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf",
+    "revision": "not checked"
+  },
+  "resources": {
+    "i2c": {
+      "count": 2,
+      "instances": [
+        0,
+        1
+      ],
+      "note": "Instance 0 is I2C0 and instance 1 is I2C1.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed peripheral.I2C.count = 2. universal_pins lists I2C{n}_SCL and I2C{n}_SDA, so the signals are GPIO-matrix routed. Confirm the controller count in the TRM. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    "uart": {
+      "count": 3,
+      "instances": [
+        0,
+        1,
+        2
+      ],
+      "note": "Instance numbers match UART0, UART1, and UART2. UART0 defaults to GPIO43/GPIO44.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed peripheral.UART.count = 3. Confirm in the TRM. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    "spi": {
+      "count": 2,
+      "instances": [
+        2,
+        3
+      ],
+      "note": "SPI2 and SPI3 only. SPI0 and SPI1 are the flash/PSRAM bus.",
+      "source": "User-controller count is 2 (instances 2 and 3). SPI0 and SPI1 are the flash/PSRAM bus and are not assignable. esp-gpio-tool peripheral.SPI.count is 3 and a comment lists SPI0–SPI3; that field is not the user-controller count. Confirm in the ESP32-S3 TRM SPI chapter. Section not checked against the PDF.",
+      "verified": false
+    },
+    "ledc": {
+      "channels": 8,
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed peripheral.LEDC.channels = 8 and count = 1. Timer count is not in that block and is not encoded. Confirm channel and timer counts in the TRM LEDC chapter. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    }
+  },
+  "gpioMatrix": {
+    "routable": [
+      "gpio",
+      "ledc",
+      "i2c",
+      "spi",
+      "uart"
+    ],
+    "fixed": [
+      "adc",
+      "touch",
+      "usb"
+    ],
+    "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed marks I2C, extra UART signals, user SPI signals, and LEDC as universal_pins (GPIO-matrix signals in that file). ADC, touch, and USB D+/D- are fixed assigned_pins. JTAG and the default UART0 pins are fixed pads that the rules still allow you to reassign. Confirm in the TRM GPIO-matrix chapter. Section not checked against the PDF while drafting this file.",
+    "verified": false
+  },
+  "strappingTiming": {
+    "holdAfterChipPuMs": 3,
+    "source": "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-2, parameter t_H. A strapping pin must hold its level for at least 3 ms after CHIP_PU goes high.",
+    "verified": true
+  },
+  "module": {
+    "name": "ESP32-S3-WROOM-1",
+    "padOrder": "Pads are listed in visual order: left top to bottom, bottom left to right, right top to bottom, then the center ground pad. Pin 41 is GND in the KiCad symbol (grouped with pads 1 and 40) but is not in the castellation arrays, so it is recorded as a center pad.",
+    "padSource": {
+      "source": "Transcribed from esp32pin (MIT, Copyright 2026 Felix Kunz) src/data/chips/generated.ts symbols S3_WROOM_1_LAYOUT and S3_WROOM_1_SYMBOL, which were generated from Espressif KiCad libraries (Apache-2.0). Confirm every pad against the ESP32-S3-WROOM-1 datasheet module pinout. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    "pads": [
+      {
+        "number": 1,
+        "side": "left",
+        "name": "GND"
+      },
+      {
+        "number": 2,
+        "side": "left",
+        "name": "3V3"
+      },
+      {
+        "number": 3,
+        "side": "left",
+        "name": "EN"
+      },
+      {
+        "number": 4,
+        "side": "left",
+        "gpio": 4
+      },
+      {
+        "number": 5,
+        "side": "left",
+        "gpio": 5
+      },
+      {
+        "number": 6,
+        "side": "left",
+        "gpio": 6
+      },
+      {
+        "number": 7,
+        "side": "left",
+        "gpio": 7
+      },
+      {
+        "number": 8,
+        "side": "left",
+        "gpio": 15
+      },
+      {
+        "number": 9,
+        "side": "left",
+        "gpio": 16
+      },
+      {
+        "number": 10,
+        "side": "left",
+        "gpio": 17
+      },
+      {
+        "number": 11,
+        "side": "left",
+        "gpio": 18
+      },
+      {
+        "number": 12,
+        "side": "left",
+        "gpio": 8
+      },
+      {
+        "number": 13,
+        "side": "left",
+        "gpio": 19
+      },
+      {
+        "number": 14,
+        "side": "left",
+        "gpio": 20
+      },
+      {
+        "number": 15,
+        "side": "bottom",
+        "gpio": 3
+      },
+      {
+        "number": 16,
+        "side": "bottom",
+        "gpio": 46
+      },
+      {
+        "number": 17,
+        "side": "bottom",
+        "gpio": 9
+      },
+      {
+        "number": 18,
+        "side": "bottom",
+        "gpio": 10
+      },
+      {
+        "number": 19,
+        "side": "bottom",
+        "gpio": 11
+      },
+      {
+        "number": 20,
+        "side": "bottom",
+        "gpio": 12
+      },
+      {
+        "number": 21,
+        "side": "bottom",
+        "gpio": 13
+      },
+      {
+        "number": 22,
+        "side": "bottom",
+        "gpio": 14
+      },
+      {
+        "number": 23,
+        "side": "bottom",
+        "gpio": 21
+      },
+      {
+        "number": 24,
+        "side": "bottom",
+        "gpio": 47
+      },
+      {
+        "number": 25,
+        "side": "bottom",
+        "gpio": 48
+      },
+      {
+        "number": 26,
+        "side": "bottom",
+        "gpio": 45
+      },
+      {
+        "number": 40,
+        "side": "right",
+        "name": "GND"
+      },
+      {
+        "number": 39,
+        "side": "right",
+        "gpio": 1
+      },
+      {
+        "number": 38,
+        "side": "right",
+        "gpio": 2
+      },
+      {
+        "number": 37,
+        "side": "right",
+        "gpio": 43
+      },
+      {
+        "number": 36,
+        "side": "right",
+        "gpio": 44
+      },
+      {
+        "number": 35,
+        "side": "right",
+        "gpio": 42
+      },
+      {
+        "number": 34,
+        "side": "right",
+        "gpio": 41
+      },
+      {
+        "number": 33,
+        "side": "right",
+        "gpio": 40
+      },
+      {
+        "number": 32,
+        "side": "right",
+        "gpio": 39
+      },
+      {
+        "number": 31,
+        "side": "right",
+        "gpio": 38
+      },
+      {
+        "number": 30,
+        "side": "right",
+        "gpio": 37
+      },
+      {
+        "number": 29,
+        "side": "right",
+        "gpio": 36
+      },
+      {
+        "number": 28,
+        "side": "right",
+        "gpio": 35
+      },
+      {
+        "number": 27,
+        "side": "right",
+        "gpio": 0
+      },
+      {
+        "number": 41,
+        "side": "center",
+        "name": "GND"
+      }
+    ]
+  },
+  "notes": [
+    {
+      "id": "provenance-esp-gpio-tool",
+      "text": "Alternate function names, RTC-domain flags, at-reset pulls, strapping text, peripheral counts, and per-die reserved GPIO lists were transcribed from esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed (Apache-2.0). The YAML is not copied into this repo. Strapping pins GPIO0, GPIO3, GPIO45, and GPIO46, plus the ADC2 Wi-Fi timeout, were checked later. The rest of this transcription has not been checked against the datasheet PDF.",
+      "source": "https://github.com/espressif/esp-gpio-tool commit a1bcdb2fe2edc50c9c88e5506dc2a841d9888dd4. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "provenance-pad-map",
+      "text": "WROOM-1 pad numbers were transcribed from ESP32 Pinout Studio's generated layout, not redrawn from the module datasheet.",
+      "source": "esp32pin src/data/chips/generated.ts S3_WROOM_1_LAYOUT / S3_WROOM_1_SYMBOL (MIT). Upstream of that file is Espressif's KiCad libraries (Apache-2.0). Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "document-urls",
+      "text": "Datasheet and module datasheet URLs are the usual Espressif documentation links. Series datasheet revision v2.2 and WROOM-1 datasheet revision v1.8 were recorded when the strapping tables were checked. The TRM URL is recorded and its revision is still not checked.",
+      "source": "Revision numbers came from the strapping review. The URLs were not re-fetched, and the TRM revision is still open.",
+      "verified": false
+    },
+    {
+      "id": "reserved-pin-sets",
+      "text": "Reserved-pin sets copied from the YAML soc: block. WROOM-1 rules use the pad map plus FN8 (always-on flash bus), R2 (quad PSRAM, GPIO26), and R8 (octal PSRAM, including GPIO35–37). ESP32-S3FN8 [27, 28, 29, 30, 31, 32] comment: quad flash. ESP32-S3R2 [26, 28, 29, 30, 31, 32] comment: quad PSRAM. ESP32-S3FH4R2 [26, 27, 28, 29, 30, 31, 32] comment: quad flash + quad PSRAM. Differs from R2 by also listing GPIO27. Not applied as its own mode. ESP32-S3R8 / R8V / R16V [26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37] comment: octal PSRAM. ESP32-S3-PICO-1-N8R2 reserved [26]. ESP32-S3-PICO-1-N8R8 reserved [26, 33, 34, 35, 36, 37]. PICO not_connected lists were not applied to this module. ESP32-S3 (no embedded flash/PSRAM) reserved_pins is empty.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.*.reserved_pins. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "rtc-domain",
+      "text": "rtcDomain true on GPIO0–GPIO21 copies the YAML rtc: true flag on power domain VDD3P3_RTC. That is the low-power domain, not the 32 kHz crystal. The crystal pins are the names XTAL_32K_P (GPIO15) and XTAL_32K_N (GPIO16).",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed gpio power_domain / rtc fields. Confirm the RTC GPIO list in the TRM. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "no-input-only",
+      "text": "No GPIO in the YAML is marked input-only, and inputOnly is false on every pin. GPIO46 input-only is an ESP32-S2 fact; the S3 YAML and the esp32pin S3-WROOM-1 pin list do not mark it that way. Confirm GPIO46 can drive high and low.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed has no input-only flag. esp32pin S3_WROOM_1_PINS does not attach input_only; S2 does, on GPIO46. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "at-reset-pulls",
+      "text": "Internal pulls at reset, from the YAML at_reset field. Pull-up: GPIO 0, 26, 27, 28, 29, 30, 31, 32, 43, 44. Pull-down: GPIO 45, 46. Every other GPIO has no at_reset entry, including GPIO3. GPIO0, GPIO3, GPIO45, and GPIO46 were checked separately in ESP32-S3 Series Datasheet v2.2 Table 3-3. This note stays unverified because the other pins in the list were not.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed at_reset PUP/PDOWN. GPIO0, GPIO3, GPIO45, and GPIO46 pulls are cited on those pins. The remaining pins in this list are still only the YAML transcription.",
+      "verified": false
+    },
+    {
+      "id": "gpio47-48-polarity",
+      "text": "The YAML lists SPICLK_DIFF and SUBSPICLK_DIFF on both GPIO47 and GPIO48, with no P/N marker. The KiCad symbol (via esp32pin) names GPIO47 SPICLK_P / SUBSPICLK_P_DIFF and GPIO48 SPICLK_N / SUBSPICLK_N_DIFF. Both name sets are stored. Polarity is not confirmed.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed gpio.47 and gpio.48, compared with esp32pin S3_WROOM_1_PINS. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "no-dac",
+      "text": "The YAML function lists contain no DAC pin. esp32pin's ESP32-S3 family note also says there is no DAC. There is no DAC assignment in v1.",
+      "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed gpio functions, and esp32pin catalog note for ESP32-S3. Confirm in the datasheet. Section not checked against the PDF while drafting this file.",
+      "verified": false
+    },
+    {
+      "id": "boot-alias",
+      "text": "GPIO0 carries an extra name BOOT taken from the KiCad symbol pin name GPIO0/BOOT. It is not in the YAML functions list, which is empty for GPIO0.",
+      "source": "esp32pin S3_WROOM_1_SYMBOL pin name \"GPIO0/BOOT\". Section not checked against the PDF while drafting this file.",
+      "verified": false
+    }
+  ],
+  "pins": [
+    {
+      "gpio": 0,
+      "names": [
+        "GPIO0",
+        "BOOT"
+      ],
+      "modulePad": 27,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "strapping",
+          "bootLevel": "high",
+          "effect": "Weak pull-up at reset. Boot level is high. 1 selects SPI boot. 0 selects joint download boot when GPIO46 is 0.",
+          "source": "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-1 and Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. GPIO0 has a weak pull-up at reset and a high boot level. 1 selects SPI boot. 0 selects joint download boot when GPIO46 is 0.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 1,
+      "names": [
+        "GPIO1",
+        "TOUCH1",
+        "ADC1_CH0"
+      ],
+      "modulePad": 39,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 0,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 1,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 2,
+      "names": [
+        "GPIO2",
+        "TOUCH2",
+        "ADC1_CH1"
+      ],
+      "modulePad": 38,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 1,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 2,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 3,
+      "names": [
+        "GPIO3",
+        "TOUCH3",
+        "ADC1_CH2"
+      ],
+      "modulePad": 15,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 2,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 3,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": [
+        {
+          "id": "strapping",
+          "infoOnly": true,
+          "effect": "Floating at reset. Only acts as a strap when the JTAG eFuses are burnt (all default 0).",
+          "source": "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. GPIO3 floats at reset and acts as a strap only when the JTAG eFuses are burnt. Those eFuses default to 0.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 4,
+      "names": [
+        "GPIO4",
+        "TOUCH4",
+        "ADC1_CH3"
+      ],
+      "modulePad": 4,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 3,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 4,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 5,
+      "names": [
+        "GPIO5",
+        "TOUCH5",
+        "ADC1_CH4"
+      ],
+      "modulePad": 5,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 4,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 5,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 6,
+      "names": [
+        "GPIO6",
+        "TOUCH6",
+        "ADC1_CH5"
+      ],
+      "modulePad": 6,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 5,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 6,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 7,
+      "names": [
+        "GPIO7",
+        "TOUCH7",
+        "ADC1_CH6"
+      ],
+      "modulePad": 7,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 6,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 7,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 8,
+      "names": [
+        "GPIO8",
+        "TOUCH8",
+        "ADC1_CH7",
+        "SUBSPICS1"
+      ],
+      "modulePad": 12,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 7,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 8,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 9,
+      "names": [
+        "GPIO9",
+        "TOUCH9",
+        "ADC1_CH8",
+        "SUBSPIHD",
+        "FSPIHD"
+      ],
+      "modulePad": 17,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 8,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 9,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 10,
+      "names": [
+        "GPIO10",
+        "TOUCH10",
+        "ADC1_CH9",
+        "FSPIIO4",
+        "SUBSPICS0",
+        "FSPICS0"
+      ],
+      "modulePad": 18,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC1",
+        "channel": 9,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 10,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": []
+    },
+    {
+      "gpio": 11,
+      "names": [
+        "GPIO11",
+        "TOUCH11",
+        "ADC2_CH0",
+        "FSPIIO5",
+        "SUBSPID",
+        "FSPID"
+      ],
+      "modulePad": 19,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 0,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 11,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 12,
+      "names": [
+        "GPIO12",
+        "TOUCH12",
+        "ADC2_CH1",
+        "FSPIIO6",
+        "SUBSPICLK",
+        "FSPICLK"
+      ],
+      "modulePad": 20,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 1,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 12,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 13,
+      "names": [
+        "GPIO13",
+        "TOUCH13",
+        "ADC2_CH2",
+        "FSPIIO7",
+        "SUBSPIQ",
+        "FSPIQ"
+      ],
+      "modulePad": 21,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 2,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 13,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 14,
+      "names": [
+        "GPIO14",
+        "TOUCH14",
+        "ADC2_CH3",
+        "FSPIDQS",
+        "SUBSPIWP",
+        "FSPIWP"
+      ],
+      "modulePad": 22,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 3,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": {
+        "channel": 14,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: TOUCH1–TOUCH14 are listed on GPIO1–GPIO14. Confirm against the ESP32-S3 Series Datasheet touch pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 15,
+      "names": [
+        "GPIO15",
+        "XTAL_32K_P",
+        "ADC2_CH4",
+        "U0RTS"
+      ],
+      "modulePad": 8,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 4,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": null,
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 16,
+      "names": [
+        "GPIO16",
+        "XTAL_32K_N",
+        "ADC2_CH5",
+        "U0CTS"
+      ],
+      "modulePad": 9,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 5,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": null,
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 17,
+      "names": [
+        "GPIO17",
+        "ADC2_CH6",
+        "U1TXD"
+      ],
+      "modulePad": 10,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 6,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": null,
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 18,
+      "names": [
+        "GPIO18",
+        "ADC2_CH7",
+        "U1RXD",
+        "CLK_OUT3"
+      ],
+      "modulePad": 11,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 7,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": null,
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 19,
+      "names": [
+        "GPIO19",
+        "USB_OTG_D-",
+        "USB_D-",
+        "ADC2_CH8",
+        "U1RTS",
+        "CLK_OUT2"
+      ],
+      "modulePad": 13,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 8,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": null,
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        },
+        {
+          "id": "usb",
+          "when": {
+            "setting": "nativeUsb",
+            "equals": true
+          },
+          "signal": "dn",
+          "effect": "USB D- (USB_D- / USB_OTG_D-). With native USB enabled this pad belongs to the USB PHY.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: GPIO19 functions include USB_D- and USB_OTG_D-; GPIO20 functions include USB_D+ and USB_OTG_D+. Confirm these are the native USB PHY pins in the ESP32-S3 Series Datasheet and the WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 20,
+      "names": [
+        "GPIO20",
+        "USB_OTG_D+",
+        "USB_D+",
+        "ADC2_CH9",
+        "U1CTS",
+        "CLK_OUT1"
+      ],
+      "modulePad": 14,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": {
+        "unit": "ADC2",
+        "channel": 9,
+        "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: ADC1_CH0–ADC1_CH9 are listed on GPIO1–GPIO10, and ADC2_CH0–ADC2_CH9 on GPIO11–GPIO20. Confirm against the ESP32-S3 Series Datasheet ADC pin table. Section not checked against the PDF while drafting this file.",
+        "verified": false
+      },
+      "touch": null,
+      "constraints": [
+        {
+          "id": "adc2_wifi",
+          "when": {
+            "setting": "wifiEnabled",
+            "equals": true
+          },
+          "effect": "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
+          "source": "ESP-IDF docs/en/api-reference/peripherals/adc/adc_oneshot.rst (master), Hardware Limitations: \"ADC2 is also used by Wi-Fi. adc_oneshot_read has provided protection between the Wi-Fi driver and ADC oneshot mode driver.\" adc_oneshot_read may fail and return ESP_ERR_TIMEOUT. This citation is that timeout behavior only.",
+          "verified": true
+        },
+        {
+          "id": "usb",
+          "when": {
+            "setting": "nativeUsb",
+            "equals": true
+          },
+          "signal": "dp",
+          "effect": "USB D+ (USB_D+ / USB_OTG_D+). With native USB enabled this pad belongs to the USB PHY.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: GPIO19 functions include USB_D- and USB_OTG_D-; GPIO20 functions include USB_D+ and USB_OTG_D+. Confirm these are the native USB PHY pins in the ESP32-S3 Series Datasheet and the WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 21,
+      "names": [
+        "GPIO21",
+        "USB_RCV"
+      ],
+      "modulePad": 23,
+      "rtcDomain": true,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": []
+    },
+    {
+      "gpio": 26,
+      "names": [
+        "GPIO26",
+        "SPICS1"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "not_exposed",
+          "signal": "SPICS1",
+          "effect": "GPIO26 (SPICS1) is not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed plus the WROOM-1 pad map. GPIO26 (SPICS1), GPIO33 (FSPIHD/SUBSPIHD/SPIIO4), and GPIO34 (FSPICS0/SUBSPICS0/SPIIO5) have no castellation. GPIO26 is in the quad-PSRAM (R2) and octal-PSRAM (R8/R8V/R16V) reserved_pins. GPIO33 and GPIO34 are in the octal lists only. None of the three are in ESP32-S3FN8 reserved_pins. Confirm bonding in the module datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        },
+        {
+          "id": "psram_reserved",
+          "when": {
+            "setting": "psram",
+            "in": [
+              "quad",
+              "octal"
+            ]
+          },
+          "effect": "SPICS1. Reserved on quad-PSRAM and octal-PSRAM dies, and not bonded out on the WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed reserved_pins includes GPIO26 for ESP32-S3R2 (comment: quad PSRAM) and for ESP32-S3R8/R8V/R16V (comment: octal PSRAM). Function on the GPIO is SPICS1. It is not a WROOM-1 castellation. Confirm which module SKUs use this net. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 27,
+      "names": [
+        "GPIO27",
+        "SPIHD"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "flash_reserved",
+          "signal": "SPIHD",
+          "effect": "Reserved for the in-module SPI flash (SPIHD) and not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.ESP32-S3FN8.reserved_pins is [27, 28, 29, 30, 31, 32] (comment: quad flash). Functions are SPIHD, SPIWP, SPICS0, SPICLK, SPIQ, SPID on GPIO27–GPIO32. None of these GPIOs appear on the WROOM-1 castellation map. The octal lists reserve most of this bus but omit GPIO27; the module still does not bring it out. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 28,
+      "names": [
+        "GPIO28",
+        "SPIWP"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "flash_reserved",
+          "signal": "SPIWP",
+          "effect": "Reserved for the in-module SPI flash (SPIWP) and not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.ESP32-S3FN8.reserved_pins is [27, 28, 29, 30, 31, 32] (comment: quad flash). Functions are SPIHD, SPIWP, SPICS0, SPICLK, SPIQ, SPID on GPIO27–GPIO32. None of these GPIOs appear on the WROOM-1 castellation map. The octal lists reserve most of this bus but omit GPIO27; the module still does not bring it out. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 29,
+      "names": [
+        "GPIO29",
+        "SPICS0"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "flash_reserved",
+          "signal": "SPICS0",
+          "effect": "Reserved for the in-module SPI flash (SPICS0) and not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.ESP32-S3FN8.reserved_pins is [27, 28, 29, 30, 31, 32] (comment: quad flash). Functions are SPIHD, SPIWP, SPICS0, SPICLK, SPIQ, SPID on GPIO27–GPIO32. None of these GPIOs appear on the WROOM-1 castellation map. The octal lists reserve most of this bus but omit GPIO27; the module still does not bring it out. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 30,
+      "names": [
+        "GPIO30",
+        "SPICLK"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "flash_reserved",
+          "signal": "SPICLK",
+          "effect": "Reserved for the in-module SPI flash (SPICLK) and not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.ESP32-S3FN8.reserved_pins is [27, 28, 29, 30, 31, 32] (comment: quad flash). Functions are SPIHD, SPIWP, SPICS0, SPICLK, SPIQ, SPID on GPIO27–GPIO32. None of these GPIOs appear on the WROOM-1 castellation map. The octal lists reserve most of this bus but omit GPIO27; the module still does not bring it out. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 31,
+      "names": [
+        "GPIO31",
+        "SPIQ"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "flash_reserved",
+          "signal": "SPIQ",
+          "effect": "Reserved for the in-module SPI flash (SPIQ) and not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.ESP32-S3FN8.reserved_pins is [27, 28, 29, 30, 31, 32] (comment: quad flash). Functions are SPIHD, SPIWP, SPICS0, SPICLK, SPIQ, SPID on GPIO27–GPIO32. None of these GPIOs appear on the WROOM-1 castellation map. The octal lists reserve most of this bus but omit GPIO27; the module still does not bring it out. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 32,
+      "names": [
+        "GPIO32",
+        "SPID"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "flash_reserved",
+          "signal": "SPID",
+          "effect": "Reserved for the in-module SPI flash (SPID) and not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc.ESP32-S3FN8.reserved_pins is [27, 28, 29, 30, 31, 32] (comment: quad flash). Functions are SPIHD, SPIWP, SPICS0, SPICLK, SPIQ, SPID on GPIO27–GPIO32. None of these GPIOs appear on the WROOM-1 castellation map. The octal lists reserve most of this bus but omit GPIO27; the module still does not bring it out. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 33,
+      "names": [
+        "GPIO33",
+        "FSPIHD",
+        "SUBSPIHD",
+        "SPIIO4"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "not_exposed",
+          "signal": "FSPIHD",
+          "effect": "GPIO33 (FSPIHD, SUBSPIHD, SPIIO4) is not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed plus the WROOM-1 pad map. GPIO26 (SPICS1), GPIO33 (FSPIHD/SUBSPIHD/SPIIO4), and GPIO34 (FSPICS0/SUBSPICS0/SPIIO5) have no castellation. GPIO26 is in the quad-PSRAM (R2) and octal-PSRAM (R8/R8V/R16V) reserved_pins. GPIO33 and GPIO34 are in the octal lists only. None of the three are in ESP32-S3FN8 reserved_pins. Confirm bonding in the module datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        },
+        {
+          "id": "psram_reserved",
+          "when": {
+            "setting": "psram",
+            "equals": "octal"
+          },
+          "effect": "Inside the octal-PSRAM die (FSPIHD, SUBSPIHD, SPIIO4) and not bonded out on the WROOM-1. Quad settings do not reserve it in the YAML, but the module still has no pad.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed octal-PSRAM reserved_pins (ESP32-S3R8, R8V, R16V) include GPIO33 and GPIO34. The quad-flash (FN8) and quad-PSRAM (R2) lists do not. These GPIOs are also not WROOM-1 castellations. Confirm in the module datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 34,
+      "names": [
+        "GPIO34",
+        "FSPICS0",
+        "SUBSPICS0",
+        "SPIIO5"
+      ],
+      "modulePad": null,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "not_exposed",
+          "signal": "FSPICS0",
+          "effect": "GPIO34 (FSPICS0, SUBSPICS0, SPIIO5) is not bonded out on the ESP32-S3-WROOM-1.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed plus the WROOM-1 pad map. GPIO26 (SPICS1), GPIO33 (FSPIHD/SUBSPIHD/SPIIO4), and GPIO34 (FSPICS0/SUBSPICS0/SPIIO5) have no castellation. GPIO26 is in the quad-PSRAM (R2) and octal-PSRAM (R8/R8V/R16V) reserved_pins. GPIO33 and GPIO34 are in the octal lists only. None of the three are in ESP32-S3FN8 reserved_pins. Confirm bonding in the module datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        },
+        {
+          "id": "psram_reserved",
+          "when": {
+            "setting": "psram",
+            "equals": "octal"
+          },
+          "effect": "Inside the octal-PSRAM die (FSPICS0, SUBSPICS0, SPIIO5) and not bonded out on the WROOM-1. Quad settings do not reserve it in the YAML, but the module still has no pad.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed octal-PSRAM reserved_pins (ESP32-S3R8, R8V, R16V) include GPIO33 and GPIO34. The quad-flash (FN8) and quad-PSRAM (R2) lists do not. These GPIOs are also not WROOM-1 castellations. Confirm in the module datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 35,
+      "names": [
+        "GPIO35",
+        "FSPID",
+        "SUBSPID",
+        "SPIIO6"
+      ],
+      "modulePad": 28,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "psram_reserved",
+          "when": {
+            "setting": "psram",
+            "equals": "octal"
+          },
+          "effect": "Used by octal PSRAM when the PSRAM setting is octal. Functions listed on this GPIO: FSPID, SUBSPID, SPIIO6. The quad-flash and quad-PSRAM reserved lists do not include it, and it is a module pad.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc reserved_pins for ESP32-S3R8, ESP32-S3R8V, and ESP32-S3R16V includes GPIO35, GPIO36, and GPIO37. Those entries are commented as octal PSRAM. The same GPIOs are not in ESP32-S3FN8 or ESP32-S3R2 reserved_pins, and they are castellations on the WROOM-1 pad map. esp32pin's OSPI note says they are unavailable on N8R8/N16R8-class modules and free otherwise. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 36,
+      "names": [
+        "GPIO36",
+        "FSPICLK",
+        "SUBSPICLK",
+        "SPIIO7"
+      ],
+      "modulePad": 29,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "psram_reserved",
+          "when": {
+            "setting": "psram",
+            "equals": "octal"
+          },
+          "effect": "Used by octal PSRAM when the PSRAM setting is octal. Functions listed on this GPIO: FSPICLK, SUBSPICLK, SPIIO7. The quad-flash and quad-PSRAM reserved lists do not include it, and it is a module pad.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc reserved_pins for ESP32-S3R8, ESP32-S3R8V, and ESP32-S3R16V includes GPIO35, GPIO36, and GPIO37. Those entries are commented as octal PSRAM. The same GPIOs are not in ESP32-S3FN8 or ESP32-S3R2 reserved_pins, and they are castellations on the WROOM-1 pad map. esp32pin's OSPI note says they are unavailable on N8R8/N16R8-class modules and free otherwise. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 37,
+      "names": [
+        "GPIO37",
+        "FSPIQ",
+        "SUBSPIQ",
+        "SPIDQS"
+      ],
+      "modulePad": 30,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "psram_reserved",
+          "when": {
+            "setting": "psram",
+            "equals": "octal"
+          },
+          "effect": "Used by octal PSRAM when the PSRAM setting is octal. Functions listed on this GPIO: FSPIQ, SUBSPIQ, SPIDQS. The quad-flash and quad-PSRAM reserved lists do not include it, and it is a module pad.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed soc reserved_pins for ESP32-S3R8, ESP32-S3R8V, and ESP32-S3R16V includes GPIO35, GPIO36, and GPIO37. Those entries are commented as octal PSRAM. The same GPIOs are not in ESP32-S3FN8 or ESP32-S3R2 reserved_pins, and they are castellations on the WROOM-1 pad map. esp32pin's OSPI note says they are unavailable on N8R8/N16R8-class modules and free otherwise. Confirm in the ESP32-S3-WROOM-1 datasheet. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 38,
+      "names": [
+        "GPIO38",
+        "USB_OTG_EXT_VMO",
+        "USB_EXT_VMO",
+        "FSPIWP",
+        "SUBSPIWP"
+      ],
+      "modulePad": 31,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": []
+    },
+    {
+      "gpio": 39,
+      "names": [
+        "GPIO39",
+        "USB_OTG_EXT_VPO",
+        "USB_EXT_VPO",
+        "MTCK",
+        "CLK_OUT3",
+        "SUBSPICS1"
+      ],
+      "modulePad": 32,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "jtag",
+          "signal": "MTCK",
+          "effect": "Pad JTAG MTCK. Assigning another function uses the pad for that function instead. The YAML lists USB D-/D+ as different functions on GPIO19/GPIO20.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: MTCK, MTDO, MTDI, and MTMS are listed on GPIO39, GPIO40, GPIO41, and GPIO42. USB_D-/USB_D+ are separate functions on GPIO19/GPIO20. Confirm pad JTAG versus USB Serial/JTAG in the TRM. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 40,
+      "names": [
+        "GPIO40",
+        "USB_OTG_EXT_OEN",
+        "USB_EXT_OEN",
+        "MTDO",
+        "CLK_OUT2"
+      ],
+      "modulePad": 33,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "jtag",
+          "signal": "MTDO",
+          "effect": "Pad JTAG MTDO. Assigning another function uses the pad for that function instead. The YAML lists USB D-/D+ as different functions on GPIO19/GPIO20.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: MTCK, MTDO, MTDI, and MTMS are listed on GPIO39, GPIO40, GPIO41, and GPIO42. USB_D-/USB_D+ are separate functions on GPIO19/GPIO20. Confirm pad JTAG versus USB Serial/JTAG in the TRM. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 41,
+      "names": [
+        "GPIO41",
+        "USB_OTG_EXT_VM",
+        "USB_EXT_VM",
+        "MTDI",
+        "CLK_OUT1"
+      ],
+      "modulePad": 34,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "jtag",
+          "signal": "MTDI",
+          "effect": "Pad JTAG MTDI. Assigning another function uses the pad for that function instead. The YAML lists USB D-/D+ as different functions on GPIO19/GPIO20.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: MTCK, MTDO, MTDI, and MTMS are listed on GPIO39, GPIO40, GPIO41, and GPIO42. USB_D-/USB_D+ are separate functions on GPIO19/GPIO20. Confirm pad JTAG versus USB Serial/JTAG in the TRM. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 42,
+      "names": [
+        "GPIO42",
+        "USB_OTG_EXT_VP",
+        "USB_EXT_VP",
+        "MTMS"
+      ],
+      "modulePad": 35,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "jtag",
+          "signal": "MTMS",
+          "effect": "Pad JTAG MTMS. Assigning another function uses the pad for that function instead. The YAML lists USB D-/D+ as different functions on GPIO19/GPIO20.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: MTCK, MTDO, MTDI, and MTMS are listed on GPIO39, GPIO40, GPIO41, and GPIO42. USB_D-/USB_D+ are separate functions on GPIO19/GPIO20. Confirm pad JTAG versus USB Serial/JTAG in the TRM. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 43,
+      "names": [
+        "GPIO43",
+        "U0TXD",
+        "CLK_OUT1"
+      ],
+      "modulePad": 37,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "uart0",
+          "signal": "tx",
+          "effect": "Default UART0 TX (U0TXD), internal pull-up at reset. The ROM bootloader uses this pin as the console.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: GPIO43 function U0TXD (at_reset PUP), GPIO44 function U0RXD (at_reset PUP). Treated as the default UART0 console. Confirm in the ESP32-S3 Series Datasheet and the ROM boot console description. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 44,
+      "names": [
+        "GPIO44",
+        "U0RXD",
+        "CLK_OUT2"
+      ],
+      "modulePad": 36,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-up",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "uart0",
+          "signal": "rx",
+          "effect": "Default UART0 RX (U0RXD), internal pull-up at reset. The ROM bootloader uses this pin as the console.",
+          "source": "esp-gpio-tool targets/esp32s3.yaml @ a1bcdb2fe2ed: GPIO43 function U0TXD (at_reset PUP), GPIO44 function U0RXD (at_reset PUP). Treated as the default UART0 console. Confirm in the ESP32-S3 Series Datasheet and the ROM boot console description. Section not checked against the PDF while drafting this file.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "gpio": 45,
+      "names": [
+        "GPIO45"
+      ],
+      "modulePad": 26,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-down",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "strapping",
+          "bootLevel": "low",
+          "effect": "Weak pull-down at reset. The 3.3 V / 1.8 V VDD_SPI mapping is not verified.",
+          "source": "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. Verified fact: weak pull-down at reset. The 3.3 V versus 1.8 V VDD_SPI level mapping is not part of this citation and remains unverified.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 46,
+      "names": [
+        "GPIO46"
+      ],
+      "modulePad": 16,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": "pull-down",
+      "adc": null,
+      "touch": null,
+      "constraints": [
+        {
+          "id": "strapping",
+          "bootLevel": "low",
+          "effect": "Weak pull-down at reset. Boot level is low. Download mode requires GPIO0 = 0 and GPIO46 = 0. GPIO46 may be either level when GPIO0 = 1.",
+          "source": "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-1 and Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. GPIO46 has a weak pull-down at reset and a low boot level. Download mode requires GPIO0 = 0 and GPIO46 = 0. When GPIO0 = 1, GPIO46 may be either level.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "gpio": 47,
+      "names": [
+        "GPIO47",
+        "SPICLK_DIFF",
+        "SUBSPICLK_DIFF",
+        "SPICLK_P",
+        "SUBSPICLK_P_DIFF"
+      ],
+      "modulePad": 24,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": []
+    },
+    {
+      "gpio": 48,
+      "names": [
+        "GPIO48",
+        "SPICLK_DIFF",
+        "SUBSPICLK_DIFF",
+        "SPICLK_N",
+        "SUBSPICLK_N_DIFF"
+      ],
+      "modulePad": 25,
+      "rtcDomain": false,
+      "inputOnly": false,
+      "atReset": null,
+      "adc": null,
+      "touch": null,
+      "constraints": []
+    }
+  ]
+}
