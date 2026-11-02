@@ -55,13 +55,16 @@ export const strappingRule: Rule = ({ chip, assignments }) => {
           strappingRuleId,
           [pin.gpio],
           `GPIO${pin.gpio} is a strapping pin. ${constraint.effect}`,
-          `GPIO${pin.gpio} floats at reset and is sampled as a strap only when the JTAG eFuses are burnt. Those eFuses default to 0.`,
+          `GPIO${pin.gpio} has no internal pull. When it is used as a strap, an external circuit must hold a defined level. It is sampled only when the JTAG eFuses are burnt, and those eFuses default to 0.`,
         ),
       )
       continue
     }
     const reasons = reasonsFor(assignment, constraint)
     const hold = `The pin must hold its level for at least ${chip.strappingTiming.holdAfterChipPuMs} ms after CHIP_PU goes high (Table 3-2, t_H).`
+    const moduleNote = pin.gpio === 45
+      ? chip.notes.find((note) => note.id === "vdd-spi-18v-modules")?.text
+      : undefined
     const boot = constraint.bootLevel
       ? `This database expects GPIO${pin.gpio} to stay ${constraint.bootLevel} at reset.`
       : `The safe reset level for GPIO${pin.gpio} is not in the pin database yet.`
@@ -71,7 +74,7 @@ export const strappingRule: Rule = ({ chip, assignments }) => {
           "warning",
           strappingRuleId,
           [pin.gpio],
-          `GPIO${pin.gpio} is a strapping pin. ${constraint.effect} ${reasons.join(" ")} ${hold}`,
+          `GPIO${pin.gpio} is a strapping pin. ${constraint.effect} ${reasons.join(" ")} ${hold}${moduleNote ? ` ${moduleNote}` : ""}`,
           `Move this signal off GPIO${pin.gpio}, or keep the pin at its boot level while reset is released. ${boot} ${hold}`,
         ),
       )
@@ -81,7 +84,7 @@ export const strappingRule: Rule = ({ chip, assignments }) => {
           "info",
           strappingRuleId,
           [pin.gpio],
-          `GPIO${pin.gpio} is a strapping pin. ${constraint.effect} This use does not by itself pull the pin off its boot level. The external circuit still has to leave the strap alone while reset is released.`,
+          `GPIO${pin.gpio} is a strapping pin. ${constraint.effect} This use does not by itself pull the pin off its boot level. The external circuit still has to leave the strap alone while reset is released.${moduleNote ? ` ${moduleNote}` : ""}`,
           `Confirm the attached circuit does not fight this strap at reset. ${boot}`,
         ),
       )

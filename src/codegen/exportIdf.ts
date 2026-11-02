@@ -374,7 +374,9 @@ function renderLedc(assignments: Assignment[]): string | null {
 function strapNote(chip: Chip, pin: Pin | undefined): string {
   const constraint = pin?.constraints.find((item) => item.id === "strapping")
   if (!constraint) return ""
-  if (constraint.infoOnly) return `GPIO${pin?.gpio} floats at reset and straps only when the JTAG eFuses are burnt.`
+  if (constraint.infoOnly) {
+    return `GPIO${pin?.gpio} has no internal pull. When it is used as a strap, an external circuit must hold a defined level.`
+  }
   return `GPIO${pin?.gpio} is a strapping pin. Hold its boot level for at least ${chip.strappingTiming.holdAfterChipPuMs} ms after CHIP_PU goes high.`
 }
 

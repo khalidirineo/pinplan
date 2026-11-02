@@ -223,8 +223,8 @@ for (const gpio of expectedGpios) {
       effect = "Weak pull-up at reset. Boot level is high. 1 selects SPI boot. 0 selects joint download boot when GPIO46 is 0."
       source = "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-1 and Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. GPIO0 has a weak pull-up at reset and a high boot level. 1 selects SPI boot. 0 selects joint download boot when GPIO46 is 0."
     } else if (gpio === 3) {
-      effect = "Floating at reset. Only acts as a strap when the JTAG eFuses are burnt (all default 0)."
-      source = "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. GPIO3 floats at reset and acts as a strap only when the JTAG eFuses are burnt. Those eFuses default to 0."
+      effect = "Floating at reset. No internal pull resistors; when used as a strap, an external circuit must hold a defined level. Only acts as a strap when the JTAG eFuses are burnt (all default 0)."
+      source = "ESP32-S3 Series Datasheet v2.2, Section 3.4: GPIO3 has no internal pull resistors, and when it is used as a strap an external circuit must hold a defined level. Table 3-1 lists GPIO3 as floating. It acts as a strap only when the JTAG eFuses are burnt; those eFuses default to 0."
     } else if (gpio === 45) {
       bootLevel = "low"
       effect = "Weak pull-down at reset, so the default bit is 0. With EFUSE_VDD_SPI_FORCE left at 0, GPIO45 = 0 selects 3.3 V from VDD3P3_RTC via R_SPI, and GPIO45 = 1 selects 1.8 V from the flash voltage regulator. If EFUSE_VDD_SPI_FORCE is 1, GPIO45 is ignored and EFUSE_VDD_SPI_TIEH selects the voltage: 1 is 3.3 V, 0 is 1.8 V."
@@ -521,6 +521,12 @@ const chip = {
       id: "boot-alias",
       text: "GPIO0 carries an extra name BOOT taken from the KiCad symbol pin name GPIO0/BOOT. It is not in the YAML functions list, which is empty for GPIO0.",
       source: `esp32pin S3_WROOM_1_SYMBOL pin name "GPIO0/BOOT". ${unchecked}`,
+      verified: false,
+    },
+    {
+      id: "vdd-spi-18v-modules",
+      text: "1.8 V modules (R8V/R16V variants, Table 1-1) need 1.8 V flash and may have VDD_SPI fixed by eFuse. Check the module datasheet for the part you are using.",
+      source: "Recorded from review against ESP32-S3 Series Datasheet v2.2 Table 1-1, which names R8V and R16V variants. Whether a WROOM-1 module fixes VDD_SPI with an eFuse has not been checked in that module datasheet.",
       verified: false,
     },
   ],

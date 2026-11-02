@@ -211,6 +211,8 @@ describe("strapping", () => {
       expect(issue?.severity).toBe("info")
       expect(issue?.message).toContain("JTAG eFuses")
       expect(issue?.message).toContain("all default 0")
+      expect(issue?.message).toContain("No internal pull resistors")
+      expect(issue?.message).toContain("external circuit must hold a defined level")
       expect(issue?.message).not.toContain("3 ms")
     }
   })
@@ -222,6 +224,7 @@ describe("strapping", () => {
       expect(issue?.message).toContain("3 ms")
       expect(issue?.message).toContain("CHIP_PU")
       expect(issue?.message).toContain("t_H")
+      if (gpio === 45) expect(issue?.message).toContain("R8V/R16V")
     }
     const button = only(strappingRuleId, [
       assign({ gpio: 0, function: "gpio", direction: "input", role: "button" }),
@@ -259,12 +262,14 @@ describe("strapping", () => {
       assign({ gpio: 45, function: "gpio", direction: "input", externalPull: "up" }),
     ])
     expect(upOnGpio45[0]?.severity).toBe("warning")
+    expect(upOnGpio45[0]?.message).toContain("module datasheet")
 
     const downOnGpio45 = only(strappingRuleId, [
       assign({ gpio: 45, function: "gpio", direction: "input", externalPull: "down" }),
     ])
     expect(downOnGpio45[0]?.severity).toBe("info")
-
+    expect(downOnGpio45[0]?.message).toContain("R8V/R16V")
+    expect(downOnGpio45[0]?.message).toContain("module datasheet")
   })
 
   it("treats I2C pull-ups as a high level at reset", () => {

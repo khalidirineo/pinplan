@@ -29,7 +29,7 @@ export interface Constraint extends Cited {
   when?: When
   bootLevel?: BootLevel
   signal?: string
-  /** Always report info. GPIO3 straps only when the JTAG eFuses are burnt. */
+  /** Always report info. GPIO3 has no internal pull and straps only when the JTAG eFuses are burnt. */
   infoOnly?: boolean
   effect: string
 }

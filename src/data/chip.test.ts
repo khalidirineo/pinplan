@@ -53,7 +53,7 @@ describe("esp32-s3-wroom-1 database", () => {
     expect(pin(3).constraints.find((item) => item.id === "strapping")).toMatchObject({
       infoOnly: true,
       verified: true,
-      effect: "Floating at reset. Only acts as a strap when the JTAG eFuses are burnt (all default 0).",
+      effect: "Floating at reset. No internal pull resistors; when used as a strap, an external circuit must hold a defined level. Only acts as a strap when the JTAG eFuses are burnt (all default 0).",
     })
     expect(pin(0).constraints.find((item) => item.id === "strapping")).toMatchObject({
       verified: true,
@@ -79,6 +79,11 @@ describe("esp32-s3-wroom-1 database", () => {
         effect: "ADC2 is also used by Wi-Fi. adc_oneshot_read may fail and return ESP_ERR_TIMEOUT.",
       })
     }
+    expect(pin(3).constraints.find((item) => item.id === "strapping")?.source).toMatch(/Section 3\.4/)
+    expect(chip.notes.find((note) => note.id === "vdd-spi-18v-modules")).toMatchObject({
+      verified: false,
+      text: "1.8 V modules (R8V/R16V variants, Table 1-1) need 1.8 V flash and may have VDD_SPI fixed by eFuse. Check the module datasheet for the part you are using.",
+    })
     expect(pin(3).constraints.find((item) => item.id === "strapping")?.bootLevel).toBeUndefined()
     expect(pin(45).constraints.find((item) => item.id === "strapping")?.bootLevel).toBe("low")
     expect(pin(46).constraints.find((item) => item.id === "strapping")?.bootLevel).toBe("low")
