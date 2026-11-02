@@ -227,8 +227,8 @@ for (const gpio of expectedGpios) {
       source = "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. GPIO3 floats at reset and acts as a strap only when the JTAG eFuses are burnt. Those eFuses default to 0."
     } else if (gpio === 45) {
       bootLevel = "low"
-      effect = "Weak pull-down at reset. The 3.3 V / 1.8 V VDD_SPI mapping is not verified."
-      source = "ESP32-S3 Series Datasheet v2.2, Section 3, Table 3-3. ESP32-S3-WROOM-1 Datasheet v1.8, Section 4. Verified fact: weak pull-down at reset. The 3.3 V versus 1.8 V VDD_SPI level mapping is not part of this citation and remains unverified."
+      effect = "Weak pull-down at reset, so the default bit is 0. With EFUSE_VDD_SPI_FORCE left at 0, GPIO45 = 0 selects 3.3 V from VDD3P3_RTC via R_SPI, and GPIO45 = 1 selects 1.8 V from the flash voltage regulator. If EFUSE_VDD_SPI_FORCE is 1, GPIO45 is ignored and EFUSE_VDD_SPI_TIEH selects the voltage: 1 is 3.3 V, 0 is 1.8 V."
+      source = "ESP32-S3 Series Datasheet v2.2, Section 3.2, Table 3-4 (VDD_SPI Voltage Control), and Table 3-1 (GPIO45 weak pull-down, default bit value 0). The eFuse parameters in Table 3-4 default to 0, and the bold default row is 3.3 V from VDD3P3_RTC via R_SPI."
     } else if (gpio === 46) {
       bootLevel = "low"
       effect = "Weak pull-down at reset. Boot level is low. Download mode requires GPIO0 = 0 and GPIO46 = 0. GPIO46 may be either level when GPIO0 = 1."

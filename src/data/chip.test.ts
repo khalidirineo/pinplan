@@ -61,9 +61,11 @@ describe("esp32-s3-wroom-1 database", () => {
     })
     expect(pin(45).constraints.find((item) => item.id === "strapping")).toMatchObject({
       verified: true,
-      effect: "Weak pull-down at reset. The 3.3 V / 1.8 V VDD_SPI mapping is not verified.",
+      bootLevel: "low",
+      effect:
+        "Weak pull-down at reset, so the default bit is 0. With EFUSE_VDD_SPI_FORCE left at 0, GPIO45 = 0 selects 3.3 V from VDD3P3_RTC via R_SPI, and GPIO45 = 1 selects 1.8 V from the flash voltage regulator. If EFUSE_VDD_SPI_FORCE is 1, GPIO45 is ignored and EFUSE_VDD_SPI_TIEH selects the voltage: 1 is 3.3 V, 0 is 1.8 V.",
     })
-    expect(pin(45).constraints.find((item) => item.id === "strapping")?.source).toMatch(/remains unverified/)
+    expect(pin(45).constraints.find((item) => item.id === "strapping")?.source).toMatch(/Section 3\.2, Table 3-4/)
     expect(pin(46).constraints.find((item) => item.id === "strapping")).toMatchObject({
       verified: true,
       effect: "Weak pull-down at reset. Boot level is low. Download mode requires GPIO0 = 0 and GPIO46 = 0. GPIO46 may be either level when GPIO0 = 1.",

@@ -37,7 +37,7 @@ Rules should read facts from the JSON. The severity and the way an assignment in
 
 ## Assignment fields the strapping rule reads
 
-A button is `function: "gpio"`, `direction: "input"`, `role: "button"`. An external resistor that is present at reset is `externalPull: "up"` or `"down"`. Outputs, LEDC, UART TX, and SPI MOSI/SCK/CS warn on a strapping pin because the load can pull the strap before firmware runs. I2C warns when its pull-ups fight the recorded boot level. A warning also says the pin must hold its level for at least 3 ms after `CHIP_PU` goes high. GPIO3 is the exception: `infoOnly` forces info, because it floats at reset and is sampled only when the JTAG eFuses are burnt (they default to 0). GPIO45's weak pull-down is verified; the 3.3 V / 1.8 V mapping is not.
+A button is `function: "gpio"`, `direction: "input"`, `role: "button"`. An external resistor that is present at reset is `externalPull: "up"` or `"down"`. Outputs, LEDC, UART TX, and SPI MOSI/SCK/CS warn on a strapping pin because the load can pull the strap before firmware runs. I2C warns when its pull-ups fight the recorded boot level. A warning also says the pin must hold its level for at least 3 ms after `CHIP_PU` goes high. GPIO3 is the exception: `infoOnly` forces info, because it floats at reset and is sampled only when the JTAG eFuses are burnt (they default to 0). GPIO45's weak pull-down is the default. With `EFUSE_VDD_SPI_FORCE` left at 0, that low level selects 3.3 V and a high level selects 1.8 V (Section 3.2, Table 3-4).
 
 SPI instance numbers are `2` and `3` (SPI2 and SPI3). SPI0 and SPI1 are the flash/PSRAM bus. I2C is `0` and `1`. UART is `0`, `1`, and `2`.
 
