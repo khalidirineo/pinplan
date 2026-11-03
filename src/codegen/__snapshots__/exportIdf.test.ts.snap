@@ -13,6 +13,7 @@ exports[`ESP-IDF export > checks adc_oneshot_read for ESP_ERR_TIMEOUT on ADC2 an
  */
 
 #include "esp_err.h"
+#include "driver/gpio.h"
 #include "esp_adc/adc_oneshot.h"
 
 static adc_oneshot_unit_handle_t pinplan_adc1;
@@ -87,6 +88,7 @@ exports[`ESP-IDF export > emits an empty init when nothing is assigned 1`] = `
  */
 
 #include "esp_err.h"
+#include "driver/gpio.h"
 
 void pinplan_init(void)
 {

@@ -14,8 +14,7 @@ export function exportEspIdf(
   const used = new Set(sorted.map((assignment) => assignment.function))
   const chunks: string[] = [header(chip, settings, issues, sorted.length === 0)]
 
-  const includes = ['#include "esp_err.h"']
-  if (used.has("gpio")) includes.push('#include "driver/gpio.h"')
+  const includes = ['#include "esp_err.h"', '#include "driver/gpio.h"']
   if (used.has("adc")) includes.push('#include "esp_adc/adc_oneshot.h"')
   if (used.has("i2c")) includes.push('#include "driver/i2c_master.h"')
   if (used.has("spi")) includes.push('#include "driver/spi_master.h"')
