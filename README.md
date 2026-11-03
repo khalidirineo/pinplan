@@ -4,9 +4,7 @@
 
 PinPlan is a pin planner for the ESP32-S3-WROOM-1. A GPIO can be a strap, a flash pin, or shared with Wi-Fi, and that is easy to miss until the board is built. You assign functions on the module drawing, PinPlan checks those traps, and it writes a starting ESP-IDF file for the design you have.
 
-![PinPlan planner](docs/screenshot.svg)
-
-The image above is a placeholder. Replace `docs/screenshot.svg` with a picture of the planner.
+![PinPlan planner](docs/screenshot.png)
 
 ## Features
 
