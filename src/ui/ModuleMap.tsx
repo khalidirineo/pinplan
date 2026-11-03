@@ -136,13 +136,13 @@ function PadButton({
             : "border-zinc-700 bg-zinc-900 text-zinc-200"
   const selectedRing = selected ? "ring-2 ring-white ring-offset-1 ring-offset-zinc-950" : ""
 
+  const role = assignment ? shortAssignment(assignment) : null
+
   if (gpio === undefined) {
     return (
-      <div
-        className={`flex h-full w-full flex-col items-center justify-center border border-zinc-800 bg-zinc-950 text-zinc-500 ${compact ? "py-1" : ""}`}
-      >
-        <span className="text-[11px] leading-none">{pad.number}</span>
-        <span className="text-xs font-medium leading-tight">{name}</span>
+      <div className="flex h-full w-full flex-col items-center justify-center gap-px overflow-hidden border border-zinc-800 bg-zinc-950 px-0.5 text-zinc-500">
+        <span className="text-[10px] leading-none">{pad.number}</span>
+        <span className="text-[11px] font-medium leading-none">{name}</span>
       </div>
     )
   }
@@ -151,15 +151,20 @@ function PadButton({
     <button
       type="button"
       aria-pressed={selected}
-      aria-label={`Pad ${pad.number}, GPIO${gpio}${assignment ? `, ${shortAssignment(assignment)}` : ""}`}
+      aria-label={`Pad ${pad.number}, GPIO${gpio}${role ? `, ${role}` : ""}`}
+      title={role ?? undefined}
       onClick={() => onSelect(gpio)}
-      className={`flex h-full w-full flex-col items-center justify-center border text-left ${tone} ${selectedRing} ${compact ? "py-1" : ""}`}
+      className={`flex h-full w-full min-h-0 flex-col items-center justify-center gap-px overflow-hidden border px-0.5 leading-none ${tone} ${selectedRing} ${compact ? "py-1" : ""}`}
     >
-      <span className="text-[11px] leading-none text-zinc-400">{pad.number}</span>
-      <span className={`font-semibold leading-tight ${compact ? "text-xs" : "text-sm"}`}>{name}</span>
-      {assignment && !compact ? (
-        <span className="text-[11px] leading-none text-current/80">{shortAssignment(assignment)}</span>
-      ) : null}
+      <span className="text-[10px] leading-none text-zinc-400">{pad.number}</span>
+      <span className="flex max-w-full items-center justify-center gap-0.5">
+        <span className={`font-semibold leading-none ${compact ? "text-[11px]" : "text-[13px]"}`}>{name}</span>
+        {role ? (
+          <span className="shrink-0 rounded-sm bg-black/40 px-0.5 text-[8px] font-semibold uppercase leading-none tracking-wide">
+            {role}
+          </span>
+        ) : null}
+      </span>
     </button>
   )
 }

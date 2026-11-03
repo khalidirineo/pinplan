@@ -209,7 +209,7 @@ export function Planner() {
               onSelect={setSelectedGpio}
             />
           </div>
-          <aside className="w-full min-[900px]:sticky min-[900px]:top-4 min-[900px]:max-h-[calc(100vh-2rem)] min-[900px]:min-w-[18rem] min-[900px]:flex-1 min-[900px]:overflow-y-auto">
+          <aside className="w-full self-start min-[900px]:sticky min-[900px]:top-0 min-[900px]:max-h-screen min-[900px]:min-w-[18rem] min-[900px]:flex-1 min-[900px]:overflow-y-auto">
             <AssignmentPanel
               chip={chip}
               pin={selectedPin}
