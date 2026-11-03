@@ -26,5 +26,8 @@ files, from:
 ESP32 is a trademark of Espressif Systems. PinPlan is not affiliated with
 or endorsed by Espressif Systems.
 
-Every hardware fact in the pin database is marked verified: false until a
-person checks it against the current datasheet or technical reference manual.
+Some facts in the pin database have been checked and are marked verified: true.
+The rest stay verified: false until someone compares them with the cited
+document. The app's Data verification note lists both groups. The series
+datasheet revision used for the checked facts is v2.2. The WROOM-1 datasheet
+revision is v1.8.

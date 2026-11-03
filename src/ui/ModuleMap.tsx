@@ -20,7 +20,7 @@ export function ModuleMap({ chip, assignments, issues, selectedGpio, onSelect }:
 
   return (
     <section aria-label="ESP32-S3-WROOM-1 module" className="rounded-lg border border-zinc-800 bg-zinc-950 p-4">
-      <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-zinc-400">
+      <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-zinc-400">
         <Legend swatch="bg-red-900 ring-red-500" label="Error" />
         <Legend swatch="bg-amber-900 ring-amber-500" label="Warning" />
         <Legend swatch="bg-sky-950 ring-sky-500" label="Info" />
@@ -141,8 +141,8 @@ function PadButton({
       <div
         className={`flex h-full w-full flex-col items-center justify-center border border-zinc-800 bg-zinc-950 text-zinc-500 ${compact ? "py-1" : ""}`}
       >
-        <span className="text-[9px] leading-none">{pad.number}</span>
-        <span className="text-[10px] font-medium leading-tight">{name}</span>
+        <span className="text-[11px] leading-none">{pad.number}</span>
+        <span className="text-xs font-medium leading-tight">{name}</span>
       </div>
     )
   }
@@ -155,10 +155,10 @@ function PadButton({
       onClick={() => onSelect(gpio)}
       className={`flex h-full w-full flex-col items-center justify-center border text-left ${tone} ${selectedRing} ${compact ? "py-1" : ""}`}
     >
-      <span className="text-[9px] leading-none text-zinc-400">{pad.number}</span>
-      <span className={`font-semibold leading-tight ${compact ? "text-[10px]" : "text-xs"}`}>{name}</span>
+      <span className="text-[11px] leading-none text-zinc-400">{pad.number}</span>
+      <span className={`font-semibold leading-tight ${compact ? "text-xs" : "text-sm"}`}>{name}</span>
       {assignment && !compact ? (
-        <span className="text-[9px] leading-none text-current/80">{shortAssignment(assignment)}</span>
+        <span className="text-[11px] leading-none text-current/80">{shortAssignment(assignment)}</span>
       ) : null}
     </button>
   )

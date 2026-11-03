@@ -1,10 +1,22 @@
 # PinPlan
 
-PinPlan is a GPIO pin planner for the ESP32-S3-WROOM-1. You assign functions to pins, and the rule engine flags conflicts and hardware traps before you build the board. The planner can export ESP-IDF v5.3+ C for the current design, including when that design still has errors. Save JSON keeps the assignments and settings in a file. Load JSON opens that file again. Copy link puts the same design in the page address, compressed with gzip, so it can be opened from a static host.
+PinPlan is a pin planner for the ESP32-S3-WROOM-1. A GPIO can be a strap, a flash pin, or shared with Wi-Fi, and that is easy to miss until the board is built. You assign functions on the module drawing, PinPlan checks those traps, and it writes a starting ESP-IDF file for the design you have.
 
-The database is `src/data/chips/esp32s3.json`. Every constraint has a `source` and a `verified` flag. Leave `verified` false until that fact has been compared with the cited document. Paths that have been checked are listed in `src/data/chip.test.ts`. `scripts/draft-esp32s3.mjs` drafted that file from the local reference clone and will not overwrite it unless you pass `--force`. After you start reviewing facts, do not re-run it.
+![PinPlan planner](docs/screenshot.svg)
 
-## Run
+The image above is a placeholder. Replace `docs/screenshot.svg` with a picture of the planner.
+
+## Features
+
+- Pad map of the ESP32-S3-WROOM-1. One assignment per GPIO.
+- Live errors, warnings, and notes for straps, flash, PSRAM, native USB, ADC2 with Wi-Fi, the UART0 console, JTAG, and too many peripherals.
+- ESP-IDF v5.3+ C export. The file is still generated when the design has errors, and those errors are copied into a comment.
+- Save and load a JSON file of the assignments and settings.
+- A share link in the page address. The design is gzip-compressed. There is no server.
+
+Settings are Wi-Fi on or off, PSRAM `none`, `quad`, or `octal`, and native USB on or off.
+
+## Run locally
 
 ```sh
 npm install
@@ -12,53 +24,42 @@ npm test
 npm run dev
 ```
 
-`npm test` runs Vitest. `npm run dev` opens the planner: the module pad map, the assignment sidebar, and the live issues list.
+Open http://localhost:5173/pinplan/ . The `/pinplan/` path matches the GitHub Pages site for a repository named `pinplan`.
 
-## Layout
-
-- `src/data/` loads and checks the chip JSON. No React.
-- `src/engine/` is a pure function, `evaluate(chip, assignments, settings)`, which returns issues. No React.
-- `src/engine/rules/` has one file per rule. Add a rule here.
-- `src/codegen/` turns a design into ESP-IDF C. No React. `exportEspIdf(chip, assignments, settings, issues)` is the entry point.
-- `src/project/` saves and loads the design as JSON, and compresses it for the share link. No React.
-- `src/ui/` is the pad map, the assignment sidebar, the issue list, the export panel, and the save, load, and share controls.
-
-An issue is `{ severity, pins, ruleId, message, fix }` with severity `error`, `warning`, or `info`.
-
-Project settings for v1 are `wifiEnabled`, `psram` (`none`, `quad`, or `octal`), and `nativeUsb`.
+`npm test` runs Vitest. `npm run build` typechecks and writes `dist/`.
 
 ## Add a rule
 
-1. Create `src/engine/rules/myRule.ts` that exports a rule id and a function `(ctx) => Issue[]`. `ctx` is `{ chip, assignments, settings }`. Use `makeIssue` so pins are deduped and the `fix` string is required.
+1. Create `src/engine/rules/myRule.ts`. Export a rule id and a function `(ctx) => Issue[]`. `ctx` is `{ chip, assignments, settings }`. Use `makeIssue` so pins are deduped and `fix` is required.
 2. Register the function and the id in `src/engine/rules/index.ts`.
 3. Add a `describe` block in `src/engine/evaluate.test.ts`.
-4. If the rule needs a new hardware fact, put it in `esp32s3.json` with a `source` and `verified: false`. Do not invent a datasheet section.
+4. If the rule needs a new hardware fact, put it in `src/data/chips/esp32s3.json` with a `source` and `verified: false`. Do not invent a datasheet section.
 
-Rules should read facts from the JSON. The severity and the way an assignment interacts with a fact live in the rule, because one strapping pin can be a warning or an info depending on the assignment.
+Rules should read facts from the JSON. The severity lives in the rule, because one strapping pin can be a warning or a note depending on the assignment.
 
-## Assignment fields the strapping rule reads
+An issue is `{ severity, pins, ruleId, message, fix }` with severity `error`, `warning`, or `info`.
 
-A button is `function: "gpio"`, `direction: "input"`, `role: "button"`. An external resistor that is present at reset is `externalPull: "up"` or `"down"`. Outputs, LEDC, UART TX, and SPI MOSI/SCK/CS warn on a strapping pin because the load can pull the strap before firmware runs. I2C warns when its pull-ups fight the recorded boot level. A warning also says the pin must hold its level for at least 3 ms after `CHIP_PU` goes high. GPIO3 is the exception: `infoOnly` forces info. It has no internal pull, so an external circuit must hold a defined level when it is used as a strap, and it is sampled only when the JTAG eFuses are burnt (they default to 0). Assigning GPIO45 also shows an unverified note that 1.8 V modules (R8V/R16V, Table 1-1) need 1.8 V flash and may have VDD_SPI fixed by eFuse. GPIO45's weak pull-down is the default. With `EFUSE_VDD_SPI_FORCE` left at 0, that low level selects 3.3 V and a high level selects 1.8 V (Section 3.2, Table 3-4).
+## How pin facts are verified
 
-SPI instance numbers are `2` and `3` (SPI2 and SPI3). SPI0 and SPI1 are the flash/PSRAM bus. I2C is `0` and `1`. UART is `0`, `1`, and `2`.
+Every cited object in `src/data/chips/esp32s3.json` has `source` and `verified`. `verified` is true only after that fact was compared with the cited document. The checked paths are listed in `src/data/chip.test.ts`. The test fails if a `verified` flag and that list disagree.
 
-## Dependencies
+Checked against the ESP32-S3 Series Datasheet v2.2 and the ESP32-S3-WROOM-1 Datasheet v1.8:
 
-React, Vite, TypeScript, and Vitest are the app stack. Tailwind CSS is pinned to v3, with PostCSS and Autoprefixer, which is the usual v3 build path. No other runtime libraries. The share link uses the browser `CompressionStream` gzip API.
+- GPIO0, GPIO3, GPIO45, and GPIO46: reset pulls and boot levels. GPIO45's VDD_SPI map is Section 3.2, Table 3-4. GPIO3 has no internal pull (Section 3.4).
+- A strap must hold its level for at least 3 ms after `CHIP_PU` goes high (Table 3-2, t_H).
+- ADC2 on GPIO11-20 can return `ESP_ERR_TIMEOUT` from `adc_oneshot_read` while Wi-Fi is running. That citation is the ESP-IDF adc_oneshot docs, not the channel map.
 
-## ESP-IDF export
+Not checked: function names, the pad map, flash and PSRAM reserved pins, peripheral counts, UART0 and JTAG labels, reset pulls on other pins, and the note that 1.8 V modules (R8V/R16V) may fix VDD_SPI with an eFuse. The technical reference manual revision is still "not checked".
 
-The export panel prints one C file. `pinplan_init` configures GPIO, ADC oneshot units, I2C master buses, SPI2/SPI3, UART, and LEDC from the assignments. Clock rates, ADC attenuation (`ADC_ATTEN_DB_12`), and the shared LEDC timer are macros at the top of the file, not facts from the pin database. An I2C bus or an SPI bus that is missing a required pin is left as a comment instead of a call that cannot succeed. ADC2 read helpers check `adc_oneshot_read` for `ESP_ERR_TIMEOUT` before `ESP_ERROR_CHECK`, because that return means Wi-Fi still owns the converter and the raw sample is invalid. Errors and warnings are copied into a comment at the top, and the file is still generated.
+`scripts/draft-esp32s3.mjs` drafted the database and will not overwrite it unless you pass `--force`. Do not re-run it after a review unless the script still preserves the checked facts.
 
-## Save, load, and share
+## Limitations
 
-Save JSON downloads `pinplan-esp32-s3-wroom-1.json`. The file is `{ chip, settings, assignments }`. Load JSON replaces the current design when the chip id matches and every assignment has the fields that function needs. A file for another chip, or an assignment with a missing direction, instance, or signal, is rejected and the open design stays as it is.
+This version plans the ESP32-S3-WROOM-1 only. There is no other chip, no account, no backend, and no KiCad export. The page is static.
 
-Copy link writes a `#d=` hash. The hash is `v1.` plus the gzip-compressed JSON, encoded so it is safe in a URL. Opening that address restores the assignments and settings. An empty planner with the default settings has no hash. The address updates as you edit, so the bar always matches the design on screen.
+## Credits
 
-## Credits and licenses
-
-PinPlan code is MIT (see `LICENSE`).
+PinPlan code is MIT. See `LICENSE`.
 
 Pin function names, strapping text, reset pulls, peripheral counts, and reserved-pin sets were transcribed from Espressif's [esp-gpio-tool](https://github.com/espressif/esp-gpio-tool) (Apache-2.0, commit `a1bcdb2`). The WROOM-1 pad map was transcribed from [ESP32 Pinout Studio](https://esp32pin.com) by Felix Kunz (MIT), which generated it from Espressif's KiCad libraries (Apache-2.0). See `NOTICE`.
 

@@ -19,7 +19,7 @@ export function ExportPanel({ source }: ExportPanelProps) {
         <button
           type="button"
           onClick={() => void copy()}
-          className="rounded border border-zinc-700 px-2 py-1 text-xs text-zinc-100"
+          className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100"
         >
           {status === "copied" ? "Copied" : status === "failed" ? "Copy failed" : "Copy"}
         </button>

@@ -11,6 +11,7 @@ import { ExportPanel } from "./ExportPanel"
 import { IssuesPanel } from "./IssuesPanel"
 import { ModuleMap } from "./ModuleMap"
 import { ProjectMenu } from "./ProjectMenu"
+import { VerificationNote } from "./VerificationNote"
 
 const chip = loadChip()
 
@@ -139,11 +140,12 @@ export function Planner() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-zinc-100">
-      <header className="border-b border-zinc-800 px-4 py-3">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4">
+      <header className="border-b border-zinc-800 px-4 py-4">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-x-6 gap-y-4">
           <div>
             <h1 className="text-lg font-semibold tracking-tight">PinPlan</h1>
-            <p className="text-xs text-zinc-400">{chip.name}</p>
+            <p className="mt-1 text-sm text-zinc-400">{chip.name}</p>
+            <p className="mt-1 text-sm leading-6 text-zinc-400">Click a pad, assign a function, then read the issues.</p>
           </div>
           <ProjectMenu
             chipId={chip.id}
@@ -187,25 +189,30 @@ export function Planner() {
           </fieldset>
         </div>
       </header>
-      <main className="mx-auto grid max-w-6xl gap-4 p-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
-        <div className="space-y-4">
-          <ModuleMap
-            chip={chip}
-            assignments={assignments}
-            issues={issues}
-            selectedGpio={selectedGpio}
-            onSelect={setSelectedGpio}
-          />
-          <IssuesPanel issues={issues} onSelect={setSelectedGpio} />
-          <ExportPanel source={exported} />
+      <main className="mx-auto max-w-6xl space-y-4 p-4">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <div className="space-y-4">
+            <ModuleMap
+              chip={chip}
+              assignments={assignments}
+              issues={issues}
+              selectedGpio={selectedGpio}
+              onSelect={setSelectedGpio}
+            />
+            <IssuesPanel issues={issues} hasAssignments={assignments.length > 0} onSelect={setSelectedGpio} />
+            <ExportPanel source={exported} />
+          </div>
+          <div className="lg:sticky lg:top-4 lg:self-start">
+            <AssignmentPanel
+              chip={chip}
+              pin={selectedPin}
+              assignment={selectedAssignment}
+              onChange={upsert}
+              onClear={clear}
+            />
+          </div>
         </div>
-        <AssignmentPanel
-          chip={chip}
-          pin={selectedPin}
-          assignment={selectedAssignment}
-          onChange={upsert}
-          onClear={clear}
-        />
+        <VerificationNote chip={chip} />
       </main>
     </div>
   )

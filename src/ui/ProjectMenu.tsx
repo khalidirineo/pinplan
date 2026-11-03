@@ -56,20 +56,20 @@ export function ProjectMenu({ chipId, settings, assignments, notice, onLoad, onC
   return (
     <div className="flex flex-col gap-1">
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" onClick={save} className="rounded border border-zinc-700 px-2 py-1 text-xs text-zinc-100">
+        <button type="button" onClick={save} className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100">
           Save JSON
         </button>
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="rounded border border-zinc-700 px-2 py-1 text-xs text-zinc-100"
+          className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100"
         >
           Load JSON
         </button>
         <button
           type="button"
           onClick={() => void copyLink()}
-          className="rounded border border-zinc-700 px-2 py-1 text-xs text-zinc-100"
+          className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100"
         >
           Copy link
         </button>
@@ -87,7 +87,7 @@ export function ProjectMenu({ chipId, settings, assignments, notice, onLoad, onC
         />
       </div>
       {(status ?? notice) && (
-        <p role="status" className={`text-xs ${(status ?? notice)?.kind === "error" ? "text-amber-300" : "text-zinc-400"}`}>
+        <p role="status" className={`text-sm ${(status ?? notice)?.kind === "error" ? "text-amber-300" : "text-zinc-400"}`}>
           {(status ?? notice)?.text}
         </p>
       )}

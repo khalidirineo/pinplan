@@ -20,7 +20,18 @@ export function AssignmentPanel({ chip, pin, assignment, onChange, onClear }: As
   return (
     <section aria-label="Pin assignment" className="rounded-lg border border-zinc-800 bg-zinc-950 p-4">
       {pin === null ? (
-        <p className="text-sm leading-6 text-zinc-400">Select a GPIO on the module to assign a function.</p>
+        <div className="space-y-3">
+          <h2 className="text-sm font-semibold text-zinc-100">Start here</h2>
+          <ol className="list-decimal space-y-2 pl-5 text-sm leading-6 text-zinc-300">
+            <li>Click a pad on the module.</li>
+            <li>Choose a function, then assign the pin.</li>
+            <li>Read the issues list. It updates as you edit.</li>
+            <li>Save JSON or copy the link to keep the design.</li>
+          </ol>
+          <p className="text-sm leading-6 text-zinc-400">
+            Wi-Fi, PSRAM, and native USB are in the header. They change which pins are reserved.
+          </p>
+        </div>
       ) : (
         <PinForm chip={chip} pin={pin} assignment={assignment} onChange={onChange} onClear={onClear} />
       )}
@@ -67,13 +78,16 @@ function PinForm({
       ) : null}
 
       {assignment === undefined ? (
-        <button
-          type="button"
-          onClick={() => commit(blank(pin.gpio, chip))}
-          className="w-full rounded bg-zinc-100 px-3 py-2 text-sm font-medium text-zinc-950"
-        >
-          Assign GPIO{pin.gpio}
-        </button>
+        <div className="space-y-3">
+          <p className="text-sm leading-6 text-zinc-400">This pad is not assigned yet.</p>
+          <button
+            type="button"
+            onClick={() => commit(blank(pin.gpio, chip))}
+            className="w-full rounded bg-zinc-100 px-3 py-2 text-sm font-medium text-zinc-950"
+          >
+            Assign GPIO{pin.gpio}
+          </button>
+        </div>
       ) : (
         <form
           className="space-y-3"

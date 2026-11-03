@@ -2,6 +2,7 @@ import type { Issue } from "../engine/types"
 
 interface IssuesPanelProps {
   issues: Issue[]
+  hasAssignments: boolean
   onSelect: (gpio: number) => void
 }
 
@@ -11,7 +12,7 @@ const tone: Record<Issue["severity"], string> = {
   info: "border-sky-900 bg-sky-950/40 text-sky-100",
 }
 
-export function IssuesPanel({ issues, onSelect }: IssuesPanelProps) {
+export function IssuesPanel({ issues, hasAssignments, onSelect }: IssuesPanelProps) {
   const counts = {
     error: issues.filter((issue) => issue.severity === "error").length,
     warning: issues.filter((issue) => issue.severity === "warning").length,
@@ -27,12 +28,14 @@ export function IssuesPanel({ issues, onSelect }: IssuesPanelProps) {
         </p>
       </header>
       {issues.length === 0 ? (
-        <p className="text-sm text-zinc-400">No conflicts on this design.</p>
+        <p className="text-sm leading-6 text-zinc-400">
+          {hasAssignments ? "No conflicts on this design." : "Assign a pin to see conflicts. A blank design has none."}
+        </p>
       ) : (
         <ul className="space-y-2">
           {issues.map((issue) => (
             <li key={`${issue.ruleId}-${issue.pins.join("-")}-${issue.message}`} className={`rounded border px-3 py-2 ${tone[issue.severity]}`}>
-              <p className="text-[10px] uppercase tracking-wide opacity-70">
+              <p className="text-xs uppercase tracking-wide opacity-70">
                 {issue.severity} · {issue.ruleId}
               </p>
               <p className="mt-1 text-sm leading-5">{issue.message}</p>
@@ -43,7 +46,7 @@ export function IssuesPanel({ issues, onSelect }: IssuesPanelProps) {
                     key={gpio}
                     type="button"
                     onClick={() => onSelect(gpio)}
-                    className="rounded bg-black/30 px-1.5 py-0.5 text-[11px]"
+                    className="rounded bg-black/30 px-2 py-0.5 text-xs"
                   >
                     GPIO{gpio}
                   </button>
