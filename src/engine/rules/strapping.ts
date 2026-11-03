@@ -75,7 +75,7 @@ export const strappingRule: Rule = ({ chip, assignments }) => {
           strappingRuleId,
           [pin.gpio],
           `GPIO${pin.gpio} is a strapping pin. ${constraint.effect} ${reasons.join(" ")} ${hold}${moduleNote ? ` ${moduleNote}` : ""}`,
-          `Move this signal off GPIO${pin.gpio}, or keep the pin at its boot level while reset is released. ${boot} ${hold}`,
+          `Move this signal off GPIO${pin.gpio}, or keep the pin at its boot level while reset is released. ${boot}`,
         ),
       )
     } else {

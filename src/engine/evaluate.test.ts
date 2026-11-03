@@ -236,6 +236,7 @@ describe("strapping", () => {
       expect(issue?.message).toContain("No internal pull resistors")
       expect(issue?.message).toContain("external circuit must hold a defined level")
       expect(issue?.message).not.toContain("3 ms")
+      expect(issue?.fix).not.toContain("3 ms")
     }
   })
 
@@ -246,6 +247,7 @@ describe("strapping", () => {
       expect(issue?.message).toContain("3 ms")
       expect(issue?.message).toContain("CHIP_PU")
       expect(issue?.message).toContain("t_H")
+      expect(issue?.fix).not.toContain("3 ms")
       if (gpio === 45) expect(issue?.message).toContain("R8V/R16V")
     }
     const button = only(strappingRuleId, [
@@ -253,6 +255,8 @@ describe("strapping", () => {
     ])
     expect(button[0]?.severity).toBe("warning")
     expect(button[0]?.message).toMatch(/button/i)
+    expect(button[0]?.message).toContain("3 ms")
+    expect(button[0]?.fix).not.toContain("3 ms")
     expect(only(strappingRuleId, [assign({ gpio: 0, function: "ledc", channel: 0 })])[0]?.severity).toBe("warning")
     expect(
       only(strappingRuleId, [assign({ gpio: 0, function: "uart", instance: 1, signal: "tx" })])[0]?.severity,
