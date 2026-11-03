@@ -53,6 +53,9 @@ describe("ESP-IDF export", () => {
       ],
       { ...defaultSettings, nativeUsb: true },
     )
+    for (const line of code.split("\n")) {
+      if (line.includes("/*") || line.trimStart().startsWith("*")) expect(line.length).toBeLessThanOrEqual(80)
+    }
     expect(code).toContain("[error] usb-pins")
     expect(code).toContain("This design still has conflicts")
     expect(code).toContain("SPI2_HOST")

@@ -5,6 +5,7 @@ import { evaluate } from "../engine/evaluate"
 import { defaultSettings } from "../engine/types"
 import type { Assignment, ProjectSettings } from "../engine/types"
 import { isEmptyDesign, parseProject, serializeProject } from "../project/document"
+import { exampleAssignments, exampleFocusGpio, exampleSettings } from "../project/example"
 import { ShareError, decodeShare, encodeShare } from "../project/share"
 import { AssignmentPanel } from "./AssignmentPanel"
 import { ExportPanel } from "./ExportPanel"
@@ -115,6 +116,13 @@ export function Planner() {
     setSettings((current) => ({ ...current, ...patch }))
   }
 
+  function loadExample() {
+    setLinkStatus(null)
+    setSettings(exampleSettings)
+    setAssignments(exampleAssignments)
+    setSelectedGpio(exampleFocusGpio)
+  }
+
   function applyDesign(nextSettings: ProjectSettings, nextAssignments: Assignment[]) {
     setLinkStatus(null)
     setSettings(nextSettings)
@@ -153,6 +161,7 @@ export function Planner() {
             assignments={assignments}
             notice={linkStatus}
             onLoad={applyDesign}
+            onLoadExample={loadExample}
             onCopyLink={() => publishShare(chip.id, settings, assignments)}
           />
           <fieldset className="flex flex-wrap items-center gap-4 text-sm">
@@ -190,8 +199,8 @@ export function Planner() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl space-y-4 p-4">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
-          <div className="space-y-4">
+        <div className="flex flex-col items-start gap-4 min-[900px]:flex-row">
+          <div className="w-full min-[900px]:w-[34rem] min-[900px]:shrink-0">
             <ModuleMap
               chip={chip}
               assignments={assignments}
@@ -199,10 +208,8 @@ export function Planner() {
               selectedGpio={selectedGpio}
               onSelect={setSelectedGpio}
             />
-            <IssuesPanel issues={issues} hasAssignments={assignments.length > 0} onSelect={setSelectedGpio} />
-            <ExportPanel source={exported} />
           </div>
-          <div className="lg:sticky lg:top-4 lg:self-start">
+          <aside className="w-full min-[900px]:sticky min-[900px]:top-4 min-[900px]:max-h-[calc(100vh-2rem)] min-[900px]:min-w-[18rem] min-[900px]:flex-1 min-[900px]:overflow-y-auto">
             <AssignmentPanel
               chip={chip}
               pin={selectedPin}
@@ -210,8 +217,10 @@ export function Planner() {
               onChange={upsert}
               onClear={clear}
             />
-          </div>
+          </aside>
         </div>
+        <IssuesPanel issues={issues} hasAssignments={assignments.length > 0} onSelect={setSelectedGpio} />
+        <ExportPanel source={exported} />
         <VerificationNote chip={chip} />
       </main>
     </div>

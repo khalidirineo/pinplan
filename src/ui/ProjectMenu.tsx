@@ -11,10 +11,11 @@ interface ProjectMenuProps {
   assignments: Assignment[]
   notice: { kind: "ok" | "error"; text: string } | null
   onLoad: (settings: ProjectSettings, assignments: Assignment[]) => void
+  onLoadExample: () => void
   onCopyLink: () => Promise<string>
 }
 
-export function ProjectMenu({ chipId, settings, assignments, notice, onLoad, onCopyLink }: ProjectMenuProps) {
+export function ProjectMenu({ chipId, settings, assignments, notice, onLoad, onLoadExample, onCopyLink }: ProjectMenuProps) {
   const fileRef = useRef<HTMLInputElement>(null)
   const [status, setStatus] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
 
@@ -65,6 +66,16 @@ export function ProjectMenu({ chipId, settings, assignments, notice, onLoad, onC
           className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100"
         >
           Load JSON
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            onLoadExample()
+            setStatus({ kind: "ok", text: "Loaded example." })
+          }}
+          className="rounded border border-zinc-700 px-3 py-1.5 text-sm text-zinc-100"
+        >
+          Load example
         </button>
         <button
           type="button"

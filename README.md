@@ -11,7 +11,7 @@ The image above is a placeholder. Replace `docs/screenshot.svg` with a picture o
 - Pad map of the ESP32-S3-WROOM-1. One assignment per GPIO.
 - Live errors, warnings, and notes for straps, flash, PSRAM, native USB, ADC2 with Wi-Fi, the UART0 console, JTAG, and too many peripherals.
 - ESP-IDF v5.3+ C export. The file is still generated when the design has errors, and those errors are copied into a comment.
-- Save and load a JSON file of the assignments and settings.
+- Save and load a JSON file of the assignments and settings. Load example fills in an LED, a button, an I2C sensor, a battery-voltage reading on ADC2, and the GPIO0 boot strap.
 - A share link in the page address. The design is gzip-compressed. There is no server.
 
 Settings are Wi-Fi on or off, PSRAM `none`, `quad`, or `octal`, and native USB on or off.

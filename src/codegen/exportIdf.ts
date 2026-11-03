@@ -118,7 +118,7 @@ function renderAdc(chip: Chip, assignments: Assignment[]): string | null {
   for (const assignment of assignments) {
     const pin = pinByGpio(chip, assignment.gpio)
     if (!pin?.adc) {
-      skipped.push(`/* GPIO${assignment.gpio} is assigned as ADC but has no channel in the pin database. */`)
+      skipped.push(block([`GPIO${assignment.gpio} is assigned as ADC but has no channel in the pin database.`], INDENT))
       continue
     }
     ready.push({ assignment, pin })
@@ -400,10 +400,37 @@ function fn(name: string, body: string): string {
   return `static void ${name}(void)\n{\n${body}\n}`
 }
 
+const COMMENT_COLUMNS = 80
+
 function block(lines: string[], indent = ""): string {
+  const prefix = `${indent} * `
+  const width = Math.max(24, COMMENT_COLUMNS - prefix.length)
   const body = lines
     .filter((line) => line.length > 0)
-    .map((line) => `${indent} * ${line.replaceAll("*/", "* /")}`)
+    .flatMap((line) => wrapComment(line.replaceAll("*/", "* /"), width))
+    .map((line) => `${prefix}${line}`)
     .join("\n")
   return `${indent}/*\n${body}\n${indent} */`
+}
+
+function wrapComment(text: string, width: number): string[] {
+  const lines: string[] = []
+  let current = ""
+  for (const word of text.split(/\s+/).filter((part) => part.length > 0)) {
+    if (word.length > width) {
+      if (current) lines.push(current)
+      for (let index = 0; index < word.length; index += width) lines.push(word.slice(index, index + width))
+      current = ""
+      continue
+    }
+    const next = current ? `${current} ${word}` : word
+    if (next.length > width) {
+      lines.push(current)
+      current = word
+    } else {
+      current = next
+    }
+  }
+  if (current) lines.push(current)
+  return lines.length > 0 ? lines : [""]
 }

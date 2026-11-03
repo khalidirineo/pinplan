@@ -26,7 +26,7 @@ export function ModuleMap({ chip, assignments, issues, selectedGpio, onSelect }:
         <Legend swatch="bg-sky-950 ring-sky-500" label="Info" />
         <Legend swatch="bg-emerald-950 ring-emerald-600" label="Assigned" />
       </div>
-      <div className="mx-auto w-full max-w-[34rem]">
+      <div className="w-full">
         <div className="flex h-16 items-end justify-center rounded-t-md border border-b-0 border-zinc-700 bg-gradient-to-b from-zinc-800 to-zinc-900 px-3 pb-2">
           <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">Antenna keep-out</p>
         </div>

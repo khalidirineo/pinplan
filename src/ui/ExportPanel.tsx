@@ -24,7 +24,7 @@ export function ExportPanel({ source }: ExportPanelProps) {
           {status === "copied" ? "Copied" : status === "failed" ? "Copy failed" : "Copy"}
         </button>
       </header>
-      <pre className="max-h-96 overflow-auto whitespace-pre rounded border border-zinc-800 bg-zinc-900 p-3 text-xs leading-5 text-zinc-200">
+      <pre className="max-h-96 overflow-y-auto overflow-x-hidden whitespace-pre-wrap break-words rounded border border-zinc-800 bg-zinc-900 p-3 text-xs leading-5 text-zinc-200">
         {source}
       </pre>
     </section>
