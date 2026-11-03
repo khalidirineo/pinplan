@@ -529,6 +529,12 @@ const chip = {
       source: "Recorded from review against ESP32-S3 Series Datasheet v2.2 Table 1-1, which names R8V and R16V variants. Whether a WROOM-1 module fixes VDD_SPI with an eFuse has not been checked in that module datasheet.",
       verified: false,
     },
+    {
+      id: "i2c-pullups",
+      text: "Internal GPIO pull-ups are usually too weak for I2C, especially at 400 kHz. Add external pull-ups from SDA and SCL to 3V3, sized for bus speed and capacitance.",
+      source: "ESP-IDF v5.3 driver/i2c_master.h says the internal pull-up is not strong enough for a high-speed bus and recommends an external pull-up. The 400 kHz figure is this project's export default, not a checked datasheet limit.",
+      verified: false,
+    },
   ],
   pins,
 }

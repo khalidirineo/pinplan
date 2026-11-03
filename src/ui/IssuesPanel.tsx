@@ -1,4 +1,5 @@
 import type { Issue } from "../engine/types"
+import { countPhrase } from "./format"
 
 interface IssuesPanelProps {
   issues: Issue[]
@@ -24,7 +25,7 @@ export function IssuesPanel({ issues, hasAssignments, onSelect }: IssuesPanelPro
       <header className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-sm font-semibold text-zinc-100">Issues</h2>
         <p className="text-xs text-zinc-400">
-          {counts.error} errors · {counts.warning} warnings · {counts.info} info
+          {countPhrase(counts.error, "error")} · {countPhrase(counts.warning, "warning")} · {countPhrase(counts.info, "info", "info")}
         </p>
       </header>
       {issues.length === 0 ? (

@@ -1,12 +1,26 @@
-import type { Rule } from "../types"
+import type { Pin } from "../../data/types"
+import type { Assignment, Rule } from "../types"
 import { makeIssue } from "../issues"
 import { pinByGpio } from "../pins"
 import { applies } from "../when"
 
 export const adc2WifiRuleId = "adc2-wifi"
 
+function isStrap(pin: Pin): boolean {
+  return pin.constraints.some((constraint) => constraint.id === "strapping")
+}
+
+/** Free ADC1 pins, with strapping pins such as GPIO3 last and marked. */
+export function adc1Fix(pins: Pin[], assignments: Assignment[]): string {
+  const taken = new Set(assignments.map((assignment) => assignment.gpio))
+  const free = pins.filter((pin) => pin.adc?.unit === "ADC1" && !taken.has(pin.gpio))
+  const label = (pin: Pin) => (isStrap(pin) ? `GPIO${pin.gpio} (strapping)` : `GPIO${pin.gpio}`)
+  const ordered = [...free.filter((pin) => !isStrap(pin)), ...free.filter((pin) => isStrap(pin))]
+  if (ordered.length === 0) return "No ADC1 pin is free."
+  return `Move this analog signal to an ADC1 pin (${ordered.map(label).join(", ")}).`
+}
+
 export const adc2WifiRule: Rule = ({ chip, assignments, settings }) => {
-  const adc1 = chip.pins.filter((pin) => pin.adc?.unit === "ADC1").map((pin) => `GPIO${pin.gpio}`)
   const issues = []
   for (const assignment of assignments) {
     if (assignment.function !== "adc") continue
@@ -20,7 +34,7 @@ export const adc2WifiRule: Rule = ({ chip, assignments, settings }) => {
         adc2WifiRuleId,
         [pin.gpio],
         `GPIO${pin.gpio} is ADC2 channel ${pin.adc.channel}. ${constraint.effect}`,
-        `Move this analog signal to an ADC1 pin (${adc1.join(", ")}).`,
+        adc1Fix(chip.pins, assignments),
       ),
     )
   }

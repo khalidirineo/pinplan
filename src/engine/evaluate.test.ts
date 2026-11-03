@@ -173,6 +173,27 @@ describe("adc2 and wifi", () => {
     expect(issue?.message).toContain("ESP_ERR_TIMEOUT")
     expect(issue?.fix).toContain("ADC1")
     expect(issue?.fix).toContain("GPIO1")
+    expect(issue?.fix.endsWith("GPIO3 (strapping)).")).toBe(true)
+    expect(issue?.fix.indexOf("GPIO2")).toBeLessThan(issue?.fix.indexOf("GPIO3 (strapping)"))
+  })
+
+  it("suggests only free ADC1 pins, with a strap marked and listed last", () => {
+    const [issue] = only(adc2WifiRuleId, [
+      assign({ gpio: 11, function: "adc" }),
+      assign({ gpio: 1, function: "gpio", direction: "output" }),
+    ], { wifiEnabled: true })
+    const listed = issue?.fix.match(/\((.*)\)\.$/)?.[1]?.split(", ") ?? []
+    expect(listed).not.toContain("GPIO1")
+    expect(listed.at(-1)).toBe("GPIO3 (strapping)")
+    expect(listed[0]).toBe("GPIO2")
+  })
+
+  it("says so when every ADC1 pin is already assigned", () => {
+    const taken = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((gpio) =>
+      assign({ gpio, function: "gpio", direction: "output" }),
+    )
+    const issues = issuesFor([assign({ gpio: 11, function: "adc" }), ...taken], { wifiEnabled: true })
+    expect(ofRule(issues, adc2WifiRuleId)[0]?.fix).toBe("No ADC1 pin is free.")
   })
 
   it("does not warn for ADC1, or for an ADC2 pin used as GPIO", () => {
@@ -394,7 +415,13 @@ describe("i2c pull-ups", () => {
     expect(issues[0]?.severity).toBe("info")
     expect(issues[0]?.ruleId).toBe(i2cPullupsRuleId)
     expect(issues[0]?.pins).toEqual([8, 9])
-    expect(issues[0]?.message).toMatch(/pull-up/i)
-    expect(issues[0]?.message).not.toMatch(/\d+\s*k/i)
+    expect(issues[0]?.message).toContain("usually too weak for I2C, especially at 400 kHz")
+    expect(issues[0]?.fix).toBe("Add external pull-ups from SDA and SCL to 3V3, sized for bus speed and capacitance.")
+    expect(`${issues[0]?.message} ${issues[0]?.fix}`).not.toMatch(/\d+(\.\d+)?\s*k(?!Hz)/i)
+    const note = chip.notes.find((item) => item.id === "i2c-pullups")
+    expect(note?.verified).toBe(false)
+    expect(note?.text).toBe(
+      "Internal GPIO pull-ups are usually too weak for I2C, especially at 400 kHz. Add external pull-ups from SDA and SCL to 3V3, sized for bus speed and capacitance.",
+    )
   })
 })

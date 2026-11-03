@@ -1,0 +1,31 @@
+name: build
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  esp-idf:
+    name: esp-idf
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Generate exports
+        run: node scripts/export-idf-fixtures.mjs
+      - name: Compile exports
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.3
+          target: esp32s3
+          path: firmware/idf-check
+          command: 'set -eu; for src in generated/*.c; do echo "=== $src ==="; cp "$src" main/pinplan_export.c; idf.py build; done'

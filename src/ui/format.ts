@@ -1,5 +1,9 @@
 import type { Issue, Assignment } from "../engine/types"
 
+export function countPhrase(count: number, singular: string, plural = `${singular}s`): string {
+  return `${count} ${count === 1 ? singular : plural}`
+}
+
 export function shortAssignment(assignment: Assignment): string {
   if (assignment.function === "gpio") return assignment.direction === "input" ? "IN" : "OUT"
   if (assignment.function === "adc") return "ADC"

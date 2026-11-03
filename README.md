@@ -1,5 +1,7 @@
 # PinPlan
 
+[![build](https://github.com/khalidirineo/pinplan/actions/workflows/idf.yml/badge.svg)](https://github.com/khalidirineo/pinplan/actions/workflows/idf.yml)
+
 PinPlan is a pin planner for the ESP32-S3-WROOM-1. A GPIO can be a strap, a flash pin, or shared with Wi-Fi, and that is easy to miss until the board is built. You assign functions on the module drawing, PinPlan checks those traps, and it writes a starting ESP-IDF file for the design you have.
 
 ![PinPlan planner](docs/screenshot.svg)
@@ -49,7 +51,9 @@ Checked against the ESP32-S3 Series Datasheet v2.2 and the ESP32-S3-WROOM-1 Data
 - A strap must hold its level for at least 3 ms after `CHIP_PU` goes high (Table 3-2, t_H).
 - ADC2 on GPIO11-20 can return `ESP_ERR_TIMEOUT` from `adc_oneshot_read` while Wi-Fi is running. That citation is the ESP-IDF adc_oneshot docs, not the channel map.
 
-Not checked: function names, the pad map, flash and PSRAM reserved pins, peripheral counts, UART0 and JTAG labels, reset pulls on other pins, and the note that 1.8 V modules (R8V/R16V) may fix VDD_SPI with an eFuse. The technical reference manual revision is still "not checked".
+Not checked: function names, the pad map, flash and PSRAM reserved pins, peripheral counts, UART0 and JTAG labels, reset pulls on other pins, the note that 1.8 V modules (R8V/R16V) may fix VDD_SPI with an eFuse, and the note that internal GPIO pull-ups are usually too weak for I2C at 400 kHz. The technical reference manual revision is still "not checked".
+
+The `build` workflow compiles the ESP-IDF v5.3 export for the example design and for a gpio, ADC1, ADC2, LEDC, I2C, SPI, and UART design. Those files are generated in CI from the current codegen.
 
 `scripts/draft-esp32s3.mjs` drafted the database and will not overwrite it unless you pass `--force`. Do not re-run it after a review unless the script still preserves the checked facts.
 

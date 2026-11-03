@@ -5,3 +5,10 @@ dist/
 *.local
 *.tsbuildinfo
 *.pdf
+firmware/idf-check/generated/
+firmware/idf-check/main/pinplan_export.c
+firmware/idf-check/build/
+firmware/idf-check/sdkconfig
+firmware/idf-check/sdkconfig.old
+firmware/idf-check/dependencies.lock
+firmware/idf-check/managed_components/

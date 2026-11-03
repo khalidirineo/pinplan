@@ -37,6 +37,9 @@ export function VerificationNote({ chip }: VerificationNoteProps) {
         <li>
           1.8 V modules (R8V/R16V, Table 1-1) need 1.8 V flash and may have VDD_SPI fixed by eFuse. Check the module datasheet for the part you are using.
         </li>
+        <li>
+          Internal GPIO pull-ups are usually too weak for I2C, especially at 400 kHz. That note was not checked against a datasheet section.
+        </li>
       </ul>
     </section>
   )
