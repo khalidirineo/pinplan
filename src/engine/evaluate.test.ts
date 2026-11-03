@@ -173,7 +173,8 @@ describe("adc2 and wifi", () => {
     expect(issue?.message).toContain("ESP_ERR_TIMEOUT")
     expect(issue?.fix).toContain("ADC1")
     expect(issue?.fix).toContain("GPIO1")
-    expect(issue?.fix.endsWith("GPIO3 (strapping)).")).toBe(true)
+    expect(issue?.fix.endsWith("GPIO3 (strapping).")).toBe(true)
+    expect(issue?.fix).not.toContain("))")
     expect(issue?.fix.indexOf("GPIO2")).toBeLessThan(issue?.fix.indexOf("GPIO3 (strapping)"))
   })
 
@@ -182,7 +183,7 @@ describe("adc2 and wifi", () => {
       assign({ gpio: 11, function: "adc" }),
       assign({ gpio: 1, function: "gpio", direction: "output" }),
     ], { wifiEnabled: true })
-    const listed = issue?.fix.match(/\((.*)\)\.$/)?.[1]?.split(", ") ?? []
+    const listed = issue?.fix.slice((issue.fix.indexOf(": ") + 2), -1).split(", ") ?? []
     expect(listed).not.toContain("GPIO1")
     expect(listed.at(-1)).toBe("GPIO3 (strapping)")
     expect(listed[0]).toBe("GPIO2")

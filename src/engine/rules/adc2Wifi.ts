@@ -17,7 +17,7 @@ export function adc1Fix(pins: Pin[], assignments: Assignment[]): string {
   const label = (pin: Pin) => (isStrap(pin) ? `GPIO${pin.gpio} (strapping)` : `GPIO${pin.gpio}`)
   const ordered = [...free.filter((pin) => !isStrap(pin)), ...free.filter((pin) => isStrap(pin))]
   if (ordered.length === 0) return "No ADC1 pin is free."
-  return `Move this analog signal to an ADC1 pin (${ordered.map(label).join(", ")}).`
+  return `Move this analog signal to an ADC1 pin: ${ordered.map(label).join(", ")}.`
 }
 
 export const adc2WifiRule: Rule = ({ chip, assignments, settings }) => {

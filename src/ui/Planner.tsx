@@ -199,8 +199,8 @@ export function Planner() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl space-y-4 p-4">
-        <div className="flex flex-col items-start gap-4 min-[900px]:flex-row">
-          <div className="w-full min-[900px]:w-[34rem] min-[900px]:shrink-0">
+        <div className="grid grid-cols-1 items-start gap-4 min-[900px]:grid-cols-[34rem_minmax(18rem,1fr)] min-[900px]:items-stretch">
+          <div className="min-w-0">
             <ModuleMap
               chip={chip}
               assignments={assignments}
@@ -209,15 +209,17 @@ export function Planner() {
               onSelect={setSelectedGpio}
             />
           </div>
-          <aside className="w-full self-start min-[900px]:sticky min-[900px]:top-0 min-[900px]:max-h-screen min-[900px]:min-w-[18rem] min-[900px]:flex-1 min-[900px]:overflow-y-auto">
-            <AssignmentPanel
-              chip={chip}
-              pin={selectedPin}
-              assignment={selectedAssignment}
-              onChange={upsert}
-              onClear={clear}
-            />
-          </aside>
+          <div className="min-w-0">
+            <aside className="min-[900px]:sticky min-[900px]:top-0 min-[900px]:max-h-screen min-[900px]:overflow-y-auto">
+              <AssignmentPanel
+                chip={chip}
+                pin={selectedPin}
+                assignment={selectedAssignment}
+                onChange={upsert}
+                onClear={clear}
+              />
+            </aside>
+          </div>
         </div>
         <IssuesPanel issues={issues} hasAssignments={assignments.length > 0} onSelect={setSelectedGpio} />
         <ExportPanel source={exported} />
